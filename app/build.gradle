@@ -8,7 +8,7 @@ android {
     compileSdk 36
 
     defaultConfig {
-        applicationId "com.nic.lgpower"
+        applicationId "com.rahabi.lgpower"
         minSdk 26
         targetSdk 36
         versionCode 48

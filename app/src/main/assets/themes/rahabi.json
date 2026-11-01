@@ -1,0 +1,29 @@
+{
+  "id": "rahabi",
+  "name": "Rahabi Charcoal Gold",
+  "colors": {
+    "window_bg":                "#0E1411",
+    "surface_bg":               "#16201B",
+    "primary_text":             "#F4F6F4",
+    "secondary_text":           "#9CAD9F",
+    "pill_label_text":          "#CCF4F6F4",
+    "section_label":            "#8E9E92",
+    "divider":                  "#222E28",
+    "pill_bg":                  "#1C2923",
+    "pill_divider":             "#0E1411",
+    "circle_btn_bg":            "#1C2923",
+    "circle_btn_icon_tint":     "#D4AF37",
+    "dpad_ring_bg":             "#1C2923",
+    "switch_track_on":          "#C5A059",
+    "switch_track_off":         "#324238",
+    "switch_thumb_on":          "#FFFFFF",
+    "switch_thumb_off":         "#4E6156",
+    "btn_accent_bg":            "#C5A059",
+    "btn_accent_text":          "#000000",
+    "btn_ghost_border":         "#34463C",
+    "btn_ghost_border_pressed": "#4C6456",
+    "btn_ghost_bg_pressed":     "#222E27",
+    "dpad_ok_bg":               "#101814"
+  },
+  "status_bar_light_icons": false
+}

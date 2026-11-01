@@ -1,75 +1,134 @@
-<img src="screenshots/v6/banner.png" width="100%" alt="LG Power. A remote for LG webOS TVs.">
-
-<p align="center">
-  <a href="../../releases/latest"><img src="https://img.shields.io/github/v/release/Nicsilver/LGPower?label=release&color=e63946" alt="Latest release"></a>
-  <a href="https://play.google.com/store/apps/details?id=com.nic.lgpower"><img src="https://img.shields.io/badge/Google%20Play-Download-e63946?logo=googleplay&logoColor=white" alt="Get it on Google Play"></a>
+﻿<p align="center">
+  <img src="store/rahabi_logo_full.png" width="380" alt="Rahabi LG Power Official Branding">
 </p>
 
-LG Power is a free, open source Android remote for LG webOS TVs. It talks to the TV over your local network, wakes it from standby with Wake-on-LAN, and falls back to the phone's IR blaster when the network can't reach it. No ads, no accounts, nothing tracked.
-
+<h1 align="center">Rahabi LG Power</h1>
 <p align="center">
-  <img src="screenshots/v6/01_main_dark.png" width="24%" alt="The whole remote. One screen.">
-  <img src="screenshots/v6/02_tvs.png" width="24%" alt="Every TV in the house.">
-  <img src="screenshots/v6/03_touchpad.png" width="24%" alt="Swipe like a trackpad.">
-  <img src="screenshots/v6/04_keyboard.png" width="24%" alt="Type with your phone.">
-</p>
-<p align="center">
-  <img src="screenshots/v6/05_media.png" width="24%" alt="Play, pause, skip. Right there.">
-  <img src="screenshots/v6/06_numpad.png" width="24%" alt="Numbers, guide and Live TV.">
-  <img src="screenshots/v6/07_main_light.png" width="24%" alt="Eight themes. Or make your own.">
-  <img src="screenshots/v6/08_settings.png" width="24%" alt="Your apps, one tap away.">
+  <b>A Community-Enhanced Open-Source Remote Control for LG webOS Televisions</b><br>
+  <i>Developed and enhanced by <b>Eng. Moaath Rahabi</b> · Based on <b>LG Power</b> by <b>Nicsilver</b></i>
 </p>
 
 <p align="center">
-  <a href="https://www.youtube.com/watch?v=PsDJb3oJZoY"><img src="screenshots/v6/teaser.webp" width="80%" alt="LG Power in action"></a><br>
-  <a href="https://www.youtube.com/watch?v=PsDJb3oJZoY">Watch the 30 second promo with sound</a>
+  <img src="https://img.shields.io/badge/License-GNU%20AGPL--3.0-blue.svg" alt="License: AGPL-3.0">
+  <img src="https://img.shields.io/badge/Android-8.0%2B%20(API%2026%E2%80%9336)-success.svg" alt="Android 8.0+">
+  <img src="https://img.shields.io/badge/LG%20webOS-2014%E2%80%932026-orange.svg" alt="webOS 2014-2026">
+  <img src="https://img.shields.io/badge/Version-1.40.1%20Community%20Edition-gold.svg" alt="Version 1.40.1">
 </p>
 
-## Features
+---
 
-- **Works on every webOS version**, including the 2025 and 2026 sets (webOS 25 and 26) that quietly broke pairing for most remote apps.
-- **Power** over the network: Wake-on-LAN turns the TV on from standby, and the status dot follows the TV's real power state. Long-press sends the IR power code for when Wi-Fi can't reach it.
-- **Several TVs**: tap the name at the top to switch between saved TVs or add another. Each TV keeps its own pairing and shortcuts.
-- **D-pad, OK, Back, Home, Input, Mute**, with hold-to-repeat on the d-pad. Volume and brightness are sliders you can also tap; the brightness slider can be swapped for channel buttons.
-- **App shortcuts**: up to eight, picked from the apps installed on your TV. A new TV starts with the streaming apps it has.
-- **Touchpad**: tap and drag straight from the button to move the pointer, or hold it to lock a full-screen cursor pad.
-- **Keyboard**: type on the phone, send to the TV. Works in the TV's search and browser.
-- **Media keys**: rewind, play, pause and forward behind a Media button; the colour keys behind Colors.
-- **Numpad** with channel rocker, OK, LIST, Guide, Info, subtitles, Exit and Live TV.
-- **Picture mode, sound mode and input** pickers, and a Screen Off that blanks the panel without putting the TV in standby.
-- **Home screen widgets** for Power, Screen Off, OK and any app shortcut.
-- **Themes**: Dark, Light, Nord, Dracula, Catppuccin, Monokai, One Light and Solarized Light, plus an editor for your own with a live preview.
-- **Service remote** (Settings › Advanced): EZ-Adjust and IN-Start over IR for phones with a blaster. Careful in there.
-- **Keep screen on** for a spare phone used as a dedicated remote, with a warning about OLED burn-in.
-- A short **guided tour** after setup, replayable from Settings › About.
+## Overview
 
-## Download
+**Rahabi LG Power** is an independent, community-enhanced distribution of the open-source **LG Power** remote control for LG webOS smart TVs.
 
-Install from [Google Play](https://play.google.com/store/apps/details?id=com.nic.lgpower), or grab the latest signed APK from the [Releases](../../releases/latest) page (you may need to allow installing from unknown sources).
+While retaining the rock-solid connection engine, Wake-on-LAN protocol, and low-latency pointer tracking of the original project, the **Rahabi Community Edition** introduces a complete ergonomic overhaul, an advanced TV channel management suite with custom grouping, a unified dynamic theme engine, and premium right-handed one-handed usability.
 
-## Setup
+No accounts, no advertisements, no tracking, and no cloud dependency — completely private over your local network.
 
-1. Put the phone on the same network as the TV. A TV connected to the phone's own hotspot works too.
-2. Open the app. It searches the network and lists the TVs it finds.
-3. Tap your TV, accept the pairing prompt on the TV screen, and give the TV a name.
+---
 
-Pairing is remembered, so later commands connect instantly. If the TV sits on another VLAN, or is wired through a dongle that discovery can't see, use **Enter IP address manually** on the setup screen. Across VLANs the phone needs to reach the TV on TCP port 3001, and Wake-on-LAN only crosses the boundary if your router forwards it.
+## Key Features
 
-For Wake-on-LAN the TV needs **Turn on via Wi-Fi** enabled (Settings › General › Devices › External Devices › TV On With Mobile; on 2025 and newer sets Support › IP control settings › Wake on LAN). If waking only works for a few minutes after switching the TV off, also enable Quick Start+ (Always Ready on 2022+ models) so the network stays awake in standby.
+### 📺 Advanced TV Channel Management
+- **Full Channel Synchronization:** Automatically imports, indexes, and caches your TV's live channel lineup (supporting 870+ channels without lag).
+- **Instant Search:** Real-time search across channel names, callsigns, and numbers.
+- **Personalized Channel Groups:** Create, rename, delete, and filter custom user categories (e.g. *Sports*, *News*, *Movies*, *Kids*).
+- **Favorites System:** One-tap favorite toggling with instant access via the dedicated *Favorites* tab.
+- **Local Customization:** Override channel broadcast names, edit logical channel numbers, and multi-digit jump directly to specific broadcasts.
+- **Safety & Reset:** Non-destructive per-channel customization reset and one-tap global reset to restore factory broadcast data at any time.
 
-## Requirements
+### 📱 Ergonomic Right-Handed Remote Layout
+- **One-Handed Thumb Reach:** Control cluster specifically engineered for single-handed right-thumb operation.
+- **Full-Width Surfaces:** Dedicated full-width D-pad surface, fluid mouse trackpad, and high-density Numpad.
+- **Continuous Gesture Controls:**
+  - **Horizontal Volume Scrubber:** Real-time smooth volume adjustment slider with discrete tap-stepping.
+  - **Vertical Channel Swipe Trackpad:** Swipe up/down anywhere on the dedicated capsule to flick through channels effortlessly.
+- **Quick Controls Card:** Direct access to USB Media Player, Program Guide, Screen Off (audio continues playing), Quick Menu, Picture Modes, Sound EQ, and Subtitles.
+- **Quick Apps Rail:** Two-tap launch bar for your installed TV streaming applications.
 
-- An LG webOS TV (developed against a C4, confirmed by users on C3, C4, C6, G5 and older LCD sets) and an Android phone on the same network.
-- An IR blaster on the phone is optional; it only backs the power fallback and the service remote.
+### 🎨 Unified Theme Engine
+- **Full App Theming:** Seamless theme consistency applied across all screens (`MainActivity`, `ChannelsActivity`, `SettingsActivity`, `AboutActivity`).
+- **9 Authentic Color Palettes:**
+  - **Rahabi Charcoal Gold** (Signature deep emerald & gold edition)
+  - **Nord** (Polar night slate & arctic snow frost)
+  - **Dracula** (Vibrant dark purple & cyan accents)
+  - **Catppuccin** (Soothing pastel dark)
+  - **Monokai** (Classic developer high-contrast)
+  - **Light & Dark** (Standard Material themes)
+  - **One Light & Solarized Light** (Daylight-optimized palettes)
+- **High-Contrast Polish:** Optimized label contrast ensuring crisp readability across all lighting environments.
 
-## Build from source
+---
+
+## Screenshots
+
+<p align="center">
+  <img src="screenshots/improved_main_remote.png" width="31%" alt="Main Remote Right-Handed Layout">
+  <img src="screenshots/channels_screen_tapped.png" width="31%" alt="Advanced Channels Screen">
+  <img src="screenshots/responsive_editor_dialog.png" width="31%" alt="Channel Editor & Customization">
+</p>
+
+---
+
+## Supported TV Models
+
+- **All LG webOS versions (2014–2026):**
+  - webOS 1.0 through webOS 6.0 (legacy NetCast / older LCD sets)
+  - webOS 22, 23, 24
+  - **webOS 25 & webOS 26** (including 2025/2026 OLED & QNED series where upstream pairing protocols changed)
+- **Verified Real Hardware:** Tested and verified on **LG 55QNED70B6T** (webOS 26).
+
+---
+
+## Setup & Pairing
+
+1. Connect your Android phone to the same Wi-Fi network as your LG TV (or phone mobile hotspot).
+2. Launch **Rahabi LG Power**. The app will discover available TVs automatically via SSDP/mDNS.
+3. Tap your TV in the list and accept the pairing prompt displayed on your TV screen.
+4. Your pairing key is stored securely on your phone. Subsequent launches connect instantly.
+
+> **Wake-on-LAN Tip:** Ensure your TV has **"Turn on via Wi-Fi"** enabled under:  
+> *Settings › General › Devices › External Devices › TV On With Mobile*  
+> (On 2025+ models: *Settings › Support › IP Control Settings › Wake on LAN*).
+
+---
+
+## Build from Source
+
+### Prerequisites
+- Android SDK (API 36, minimum API 26)
+- JDK 17 or newer
 
 ```bash
+git clone https://github.com/moaath-rahabi/Rahabi-LG-Power.git
+cd Rahabi-LG-Power
 ./gradlew assembleDebug
 ```
 
-Requires JDK 17 or newer. `tools/faketv` is a fake webOS TV for developing against an emulator without a real set.
+The compiled APK will be generated at:  
+`app/build/outputs/apk/debug/app-debug.apk`
+
+---
+
+## Attribution & Credits
+
+- **Original Project & Core Engine:**  
+  [LG Power](https://github.com/Nicsilver/LGPower) created by **Nicsilver** and contributors.  
+  *Core webOS WebSocket client, pointer session protocol, IR fallback, and foundational remote mechanics.*
+
+- **Community Edition Lead Developer:**  
+  **Eng. Moaath Rahabi**  
+  *Advanced TV channel synchronization, custom channel groups, favorites, right-handed ergonomic UX redesign, unified theming system, and branding.*
+
+---
+
+## License
+
+This project is licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**.  
+See the [`LICENSE`](LICENSE) and [`NOTICE.md`](NOTICE.md) files for complete details.
+
+---
 
 ## Disclaimer
 
-LG Power is an independent hobby project. It is not affiliated with, endorsed by, or connected to LG Electronics. LG and webOS are trademarks of LG Electronics Inc.
+**Rahabi LG Power** is an independent community open-source project. It is not affiliated with, endorsed by, or connected to **LG Electronics Inc.** *LG*, *webOS*, and related marks are trademarks of LG Electronics Inc.

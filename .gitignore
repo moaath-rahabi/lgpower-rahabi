@@ -14,3 +14,15 @@ store/video/old_*/
 store/listing-v2.md
 store/reddit_post_staged.txt
 WISHLIST.md
+
+# Local scratch and test artifacts
+dump.xml
+*.dump.xml
+*.log
+scratch/
+rollback.ps1
+setup.png
+channels_activity.png
+editor_dialog.png
+main_activity.png
+screenshots/

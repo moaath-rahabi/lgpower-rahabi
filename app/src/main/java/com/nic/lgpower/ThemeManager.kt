@@ -15,17 +15,17 @@ object ThemeManager {
 
     // Dark and Light are pinned to the top of the picker, in that order; the rest
     // (built-in then custom) follow alphabetically by name.
-    private val pinnedOrder = listOf("dark", "light")
+    private val pinnedOrder = listOf("rahabi", "dark", "light")
 
     fun getActiveThemeId(context: Context): String =
-        prefs(context).getString(PREF_KEY, "dark") ?: "dark"
+        prefs(context).getString(PREF_KEY, "rahabi") ?: "rahabi"
 
     fun setActiveThemeId(context: Context, id: String) =
         prefs(context).edit().putString(PREF_KEY, id).apply()
 
     fun getActiveTheme(context: Context): ThemeConfig =
         runCatching { loadTheme(context, getActiveThemeId(context)) }
-            .getOrElse { loadTheme(context, "dark") }
+            .getOrElse { loadTheme(context, "rahabi") }
 
     fun listThemes(context: Context): List<ThemeConfig> {
         val builtIn = (context.assets.list("themes") ?: emptyArray())
@@ -111,14 +111,42 @@ object ThemeManager {
         }
     }
 
-    private fun oval(color: Int) = GradientDrawable().apply {
+    fun oval(color: Int) = GradientDrawable().apply {
         shape = GradientDrawable.OVAL
         setColor(color)
     }
 
-    private fun roundRect(color: Int, radius: Float) = GradientDrawable().apply {
+    fun oval(
+        fillColor: Int,
+        strokeColor: Int,
+        strokeWidthDp: Float,
+        density: Float
+    ) = GradientDrawable().apply {
+        shape = GradientDrawable.OVAL
+        setColor(fillColor)
+        if (strokeWidthDp > 0f && strokeColor != android.graphics.Color.TRANSPARENT) {
+            setStroke((strokeWidthDp * density).toInt(), strokeColor)
+        }
+    }
+
+    fun roundRect(color: Int, radiusPx: Float) = GradientDrawable().apply {
         shape = GradientDrawable.RECTANGLE
-        cornerRadius = radius
+        cornerRadius = radiusPx
         setColor(color)
+    }
+
+    fun roundRect(
+        fillColor: Int,
+        radiusDp: Float,
+        strokeColor: Int,
+        strokeWidthDp: Float,
+        density: Float
+    ) = GradientDrawable().apply {
+        shape = GradientDrawable.RECTANGLE
+        cornerRadius = radiusDp * density
+        setColor(fillColor)
+        if (strokeWidthDp > 0f && strokeColor != android.graphics.Color.TRANSPARENT) {
+            setStroke((strokeWidthDp * density).toInt(), strokeColor)
+        }
     }
 }

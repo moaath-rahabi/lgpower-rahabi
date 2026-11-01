@@ -32,12 +32,26 @@
             </intent-filter>
         </activity>
 
+        <!-- Advanced Channels -->
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".ChannelsActivity"
+            android:exported="false"
+            android:label="@string/channels_title" />
+
         <!-- Settings -->
         <activity
             android:screenOrientation="portrait"
             android:name=".SettingsActivity"
             android:exported="true"
             android:label="Settings" />
+
+        <!-- About Rahabi LG Power -->
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".AboutActivity"
+            android:exported="false"
+            android:label="About Rahabi LG Power" />
 
         <activity
             android:screenOrientation="portrait"

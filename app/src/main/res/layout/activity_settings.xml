@@ -124,6 +124,38 @@
             android:background="@drawable/bg_section_group">
 
             <LinearLayout
+                android:id="@+id/row_channels"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:tag="row_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="TV Channels &amp; Favorites"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_chevron_right"
+                    android:scaleType="fitCenter"
+                    android:tint="#555555" />
+
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#242424" android:tag="divider" android:layout_marginStart="16dp" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:orientation="horizontal"
@@ -562,14 +594,17 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:padding="16dp">
+                android:padding="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
 
                 <ImageView
                     android:id="@+id/img_app_mark"
                     android:layout_width="52dp"
                     android:layout_height="52dp"
-                    android:src="@drawable/ic_app_mark"
-                    android:background="@drawable/bg_app_mark"
+                    android:src="@drawable/ic_rahabi_emblem"
+                    android:scaleType="fitCenter"
                     android:importantForAccessibility="no" />
 
                 <LinearLayout
@@ -583,7 +618,7 @@
                         android:tag="row_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="LG Power"
+                        android:text="Rahabi LG Power"
                         android:textColor="#FFFFFF"
                         android:textSize="17sp"
                         android:fontFamily="sans-serif-medium" />
@@ -614,6 +649,64 @@
                     </LinearLayout>
 
                 </LinearLayout>
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_chevron_right"
+                    android:scaleType="fitCenter"
+                    android:tint="#555555" />
+
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#242424" android:tag="divider" android:layout_marginStart="16dp" />
+
+            <!-- Dedicated About Row -->
+            <LinearLayout
+                android:id="@+id/row_about_rahabi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="52dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="12dp"
+                android:paddingVertical="10dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:tag="row_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="About Rahabi LG Power"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:tag="row_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Community Edition · Credits &amp; License"
+                        android:textColor="#8E8E93"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_chevron_right"
+                    android:scaleType="fitCenter"
+                    android:tint="#555555" />
 
             </LinearLayout>
 

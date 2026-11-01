@@ -48,6 +48,10 @@ class SettingsActivity : AppCompatActivity() {
                 .putExtra(SetupActivity.EXTRA_ADD_TV, true))
         }
 
+        findViewById<View>(R.id.row_channels)?.setOnClickListener {
+            startActivity(android.content.Intent(this, ChannelsActivity::class.java))
+        }
+
         // Controls toggles
         val switchKeepScreenOn     = findViewById<Switch>(R.id.switch_keep_screen_on)
         switchKeepScreenOn.isChecked     = prefs.getBoolean("keep_screen_on", false)
@@ -174,6 +178,12 @@ class SettingsActivity : AppCompatActivity() {
         }
         findViewById<View>(R.id.row_contact).setOnClickListener { ContactMail.open(this) }
         findViewById<View>(R.id.row_conn_report).setOnClickListener { showConnReportSheet(client) }
+        findViewById<View>(R.id.row_app_header).setOnClickListener {
+            startActivity(android.content.Intent(this, AboutActivity::class.java))
+        }
+        findViewById<View>(R.id.row_about_rahabi)?.setOnClickListener {
+            startActivity(android.content.Intent(this, AboutActivity::class.java))
+        }
         // Hidden: a long press on the app header opens the keyboard test
         findViewById<View>(R.id.row_app_header).setOnLongClickListener {
             it.performHapticFeedback(android.view.HapticFeedbackConstants.LONG_PRESS)

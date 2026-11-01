@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">LG Power</string>
+    <string name="app_name">Rahabi LG Power</string>
     <string name="widget_label">TV Power</string>
     <string name="widget_description">Turn the TV on or off over Wi-Fi, IR if the TV is unreachable</string>
     <string name="screen_off_widget_label">TV Screen Off</string>
@@ -10,4 +10,23 @@
     <string name="shortcut_widget_label">LG App Shortcut</string>
     <string name="shortcut_widget_description">Launch a TV app with one tap</string>
     <color name="power_icon">#FFFFFFFF</color>
+
+    <string name="channels_title">Channels</string>
+    <string name="channels_title_ar">القنوات</string>
+    <string name="search_channels_hint">Search channels or number…</string>
+    <string name="tab_all">All</string>
+    <string name="tab_favorites">Favorites</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="dialog_edit_channel_title">Edit Channel</string>
+    <string name="original_name_label">Original Name</string>
+    <string name="original_number_label">Original Number</string>
+    <string name="custom_name_label">Custom Name</string>
+    <string name="custom_shortcut_label">Shortcut Number</string>
+    <string name="groups_label">Groups</string>
+    <string name="favorite_label">Favorite</string>
+    <string name="hidden_label">Hide Channel</string>
+    <string name="current_channel_badge">LIVE</string>
 </resources>

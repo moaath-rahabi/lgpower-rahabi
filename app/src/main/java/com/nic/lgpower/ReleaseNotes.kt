@@ -13,7 +13,17 @@ object ReleaseNotes {
     fun since(lastSeenCode: Int) = all.filter { it.code > lastSeenCode }
 
     val all = listOf(
-        Release(48, "1.40.1", "2026-10-28", listOf(
+        Release(48, "1.40.1", "2026-11-01", listOf(
+            "Rahabi Community Edition: Official branding, emblem launcher icon, and dedicated About page",
+            "Advanced TV Channels: Fast channel list, live channel search, number indexing, and TV sync",
+            "Personalized Channel Groups: Create custom categories, filter channels, and manage favorites",
+            "Channel Customization & Safety: Custom names, numbers, multi-digit jumping, and single/global reset",
+            "Ergonomic Right-Handed Remote Layout: Optimized one-handed thumb reach for volume, channels, and playback",
+            "Full-Width Control Surfaces: Dedicated full-width D-pad, smooth Trackpad, and high-density Numpad",
+            "Continuous Control Gestures: Horizontal volume scrubber slider and vertical channel swipe trackpad",
+            "Direct Quick Access: Quick Apps rail, USB Media Player tile, Quick Menu, Screen Off, and Picture/Sound presets",
+            "Unified Theme Engine: 9 authentic themes (Rahabi Charcoal Gold, Nord, Dracula, Catppuccin, etc.) applied dynamically across all screens",
+            "High-Contrast UI Polish: Enhanced secondary label legibility across dark and polar themes",
             "Arrow keys show one press highlight again instead of two",
         )),
         Release(47, "1.40.0", "2026-10-26", listOf(

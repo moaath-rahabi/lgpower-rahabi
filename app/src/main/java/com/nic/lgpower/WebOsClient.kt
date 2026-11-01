@@ -1136,6 +1136,24 @@ class WebOsClient(appContext: Context) {
     fun channelUp()     = pressKey("CHANNELUP")
     fun channelDown()   = pressKey("CHANNELDOWN")
 
+    fun openChannel(channelId: String): Result {
+        return execute(ChannelProtocol.OPEN_CHANNEL_URI, JSONObject().put("channelId", channelId))
+    }
+
+    fun getChannelList(timeoutSecs: Long = 10): List<TvChannel>? {
+        resumeGate.await(RESUME_GATE_MAX_MS)
+        val reply = commandSession().send(ChannelProtocol.CHANNEL_LIST_URI, JSONObject(), timeoutSecs)
+        val payload = (reply as? CmdReply.Ok)?.payload ?: return null
+        return ChannelProtocol.parseChannelList(payload.toString()).channels
+    }
+
+    fun getCurrentChannel(timeoutSecs: Long = 4): TvChannel? {
+        resumeGate.await(RESUME_GATE_MAX_MS)
+        val reply = commandSession().send(ChannelProtocol.CURRENT_CHANNEL_URI, JSONObject(), timeoutSecs)
+        val payload = (reply as? CmdReply.Ok)?.payload ?: return null
+        return ChannelProtocol.parseCurrentChannel(payload.toString())
+    }
+
     data class VolumeState(val volume: Int, val muted: Boolean)
 
     // An AV receiver or soundbar on ARC/optical often ignores setVolume (the TV only

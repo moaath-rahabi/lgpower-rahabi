@@ -1,0 +1,469 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/about_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#0D1411">
+
+    <!-- Top App Bar -->
+    <LinearLayout
+        android:id="@+id/about_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="8dp">
+
+        <ImageButton
+            android:id="@+id/btn_about_back"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_back"
+            android:scaleType="centerInside"
+            app:tint="#D4AF37"
+            android:contentDescription="Back" />
+
+        <TextView
+            android:id="@+id/tv_about_top_title"
+            android:tag="row_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="About Rahabi LG Power"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-medium" />
+
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="32dp">
+
+            <!-- Official Full Logo -->
+            <ImageView
+                android:id="@+id/iv_about_full_logo"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:src="@drawable/rahabi_logo_full"
+                android:scaleType="fitCenter"
+                android:contentDescription="Rahabi LG Power Official Logo" />
+
+            <!-- App Title & Edition Badge -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:id="@+id/tv_about_app_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rahabi LG Power"
+                    android:textColor="#E6C65A"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.04" />
+
+                <TextView
+                    android:id="@+id/tv_about_edition_badge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/bg_community_badge"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="4dp"
+                    android:text="COMMUNITY EDITION"
+                    android:textColor="#E6C65A"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.08" />
+
+                <TextView
+                    android:id="@+id/tv_about_version"
+                    android:tag="row_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Version 1.40.1 · Build 48"
+                    android:textColor="#8E8E93"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+            <!-- Description Card -->
+            <TextView
+                android:tag="section_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="OVERVIEW"
+                android:textColor="#8E8E93"
+                android:textSize="12sp"
+                android:letterSpacing="0.06"
+                android:paddingHorizontal="4dp"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:id="@+id/card_about_desc"
+                android:tag="surface_bg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_section_group"
+                android:padding="16dp"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:id="@+id/tv_about_description_p1"
+                    android:tag="row_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Rahabi LG Power is an independent community-enhanced edition of LG Power, an open-source Android remote control application for LG webOS televisions."
+                    android:textColor="#E0E0E0"
+                    android:textSize="14sp"
+                    android:lineSpacingExtra="4dp" />
+
+                <TextView
+                    android:id="@+id/tv_about_description_p2"
+                    android:tag="row_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="This edition builds upon the original project with advanced channel management, personalized channel groups, favorites, an enhanced right-handed remote interface, improved application shortcuts, and unified theme support."
+                    android:textColor="#A0A0A0"
+                    android:textSize="13sp"
+                    android:lineSpacingExtra="3dp" />
+
+            </LinearLayout>
+
+            <!-- Credits Card -->
+            <TextView
+                android:tag="section_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DEVELOPMENT &amp; CREDITS"
+                android:textColor="#8E8E93"
+                android:textSize="12sp"
+                android:letterSpacing="0.06"
+                android:paddingHorizontal="4dp"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:id="@+id/card_about_credits"
+                android:tag="surface_bg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_section_group"
+                android:padding="16dp"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:tag="section_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DEVELOPED AND ENHANCED BY"
+                    android:textColor="#D4AF37"
+                    android:textSize="11sp"
+                    android:letterSpacing="0.05"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:tag="row_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="Eng. Moaath Rahabi"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium" />
+
+                <TextView
+                    android:tag="row_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Lead Developer · Channel Management, Right-Handed UX, Themes &amp; Branding"
+                    android:textColor="#8E8E93"
+                    android:textSize="12sp" />
+
+                <View
+                    android:tag="divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#242424"
+                    android:layout_marginVertical="14dp" />
+
+                <TextView
+                    android:tag="section_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ORIGINAL OPEN-SOURCE PROJECT"
+                    android:textColor="#D4AF37"
+                    android:textSize="11sp"
+                    android:letterSpacing="0.05"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:tag="row_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="LG Power by Nicsilver"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif-medium" />
+
+                <TextView
+                    android:tag="row_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Core webOS protocol implementation, touchpad, keyboard &amp; app foundation"
+                    android:textColor="#8E8E93"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <!-- Links & Legal Group -->
+            <TextView
+                android:tag="section_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SOURCE CODE &amp; LEGAL"
+                android:textColor="#8E8E93"
+                android:textSize="12sp"
+                android:letterSpacing="0.06"
+                android:paddingHorizontal="4dp"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:id="@+id/card_about_links"
+                android:tag="surface_bg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_section_group"
+                android:layout_marginBottom="20dp">
+
+                <!-- Upstream Repo -->
+                <LinearLayout
+                    android:id="@+id/row_link_upstream"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="12dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+
+                    <TextView
+                        android:tag="row_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Original Project (Nicsilver/LGPower)"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_chevron_right"
+                        android:scaleType="fitCenter"
+                        app:tint="#555555" />
+
+                </LinearLayout>
+
+                <View android:tag="divider" android:layout_width="match_parent" android:layout_height="1dp" android:background="#242424" android:layout_marginStart="16dp" />
+
+                <!-- Community Repo -->
+                <LinearLayout
+                    android:id="@+id/row_link_repo"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="12dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+
+                    <TextView
+                        android:tag="row_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Rahabi LG Power Repository"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_chevron_right"
+                        android:scaleType="fitCenter"
+                        app:tint="#555555" />
+
+                </LinearLayout>
+
+                <View android:tag="divider" android:layout_width="match_parent" android:layout_height="1dp" android:background="#242424" android:layout_marginStart="16dp" />
+
+                <!-- Release Notes -->
+                <LinearLayout
+                    android:id="@+id/row_about_release_notes"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="12dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+
+                    <TextView
+                        android:tag="row_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Release Notes / What's New"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_chevron_right"
+                        android:scaleType="fitCenter"
+                        app:tint="#555555" />
+
+                </LinearLayout>
+
+                <View android:tag="divider" android:layout_width="match_parent" android:layout_height="1dp" android:background="#242424" android:layout_marginStart="16dp" />
+
+                <!-- License -->
+                <LinearLayout
+                    android:id="@+id/row_about_license"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="12dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+
+                    <TextView
+                        android:tag="row_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Open-Source License (GNU AGPL-3.0)"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_chevron_right"
+                        android:scaleType="fitCenter"
+                        app:tint="#555555" />
+
+                </LinearLayout>
+
+                <View android:tag="divider" android:layout_width="match_parent" android:layout_height="1dp" android:background="#242424" android:layout_marginStart="16dp" />
+
+                <!-- Third Party Notices -->
+                <LinearLayout
+                    android:id="@+id/row_about_third_party"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="12dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+
+                    <TextView
+                        android:tag="row_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Third-Party Notices"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_chevron_right"
+                        android:scaleType="fitCenter"
+                        app:tint="#555555" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Disclaimer Card -->
+            <LinearLayout
+                android:id="@+id/card_about_disclaimer"
+                android:tag="surface_bg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_section_group"
+                android:padding="16dp">
+
+                <TextView
+                    android:tag="section_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DISCLAIMER"
+                    android:textColor="#8E8E93"
+                    android:textSize="11sp"
+                    android:letterSpacing="0.05"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_about_disclaimer"
+                    android:tag="row_value"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="Rahabi LG Power is an independent community project. It is not affiliated with, endorsed by, or connected to LG Electronics. LG and webOS are registered trademarks of LG Electronics Inc."
+                    android:textColor="#7A7A7A"
+                    android:textSize="12sp"
+                    android:lineSpacingExtra="2dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

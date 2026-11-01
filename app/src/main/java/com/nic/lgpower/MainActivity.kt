@@ -17,6 +17,7 @@ import android.view.HapticFeedbackConstants
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
@@ -26,6 +27,7 @@ import android.graphics.drawable.GradientDrawable
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.widget.doAfterTextChanged
@@ -35,6 +37,9 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.abs
 
 class MainActivity : AppCompatActivity() {
+
+    enum class RemoteMode { DPAD, TRACKPAD, NUMPAD }
+    private var currentMode = RemoteMode.DPAD
 
     private val client by lazy { WebOsClient(this) }
 
@@ -127,11 +132,10 @@ class MainActivity : AppCompatActivity() {
         setStatus(TvStatus.CHECKING)
 
         // Override recents/task switcher icon with transparent-background bitmap
-        val iconDrawable = AppCompatResources.getDrawable(this, R.drawable.ic_launcher_foreground)
+        val iconDrawable = AppCompatResources.getDrawable(this, R.drawable.ic_rahabi_emblem)
         val iconBmp = Bitmap.createBitmap(192, 192, Bitmap.Config.ARGB_8888)
         iconDrawable?.setBounds(0, 0, 192, 192)
         val iconCanvas = Canvas(iconBmp)
-        iconCanvas.scale(1.5f, 1.5f, 96f, 96f)
         iconDrawable?.draw(iconCanvas)
         @Suppress("DEPRECATION")
         setTaskDescription(ActivityManager.TaskDescription(getString(R.string.app_name), iconBmp, Color.TRANSPARENT))
@@ -157,6 +161,151 @@ class MainActivity : AppCompatActivity() {
             if (currentScreenOff) return@setOnClickListener
             setScreenOffButton(true)
             sendCommand { client.turnOffScreen() }
+        }
+
+        // Direct Channels button
+        // Mode selector clicks
+        findViewById<View>(R.id.btn_mode_dpad)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            setRemoteMode(RemoteMode.DPAD)
+        }
+        findViewById<View>(R.id.btn_mode_trackpad)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            setRemoteMode(RemoteMode.TRACKPAD)
+        }
+        findViewById<View>(R.id.btn_mode_numpad)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            setRemoteMode(RemoteMode.NUMPAD)
+        }
+        val savedMode = appPrefs.getString("rahabi_remote_mode", RemoteMode.DPAD.name) ?: RemoteMode.DPAD.name
+        setRemoteMode(runCatching { RemoteMode.valueOf(savedMode) }.getOrDefault(RemoteMode.DPAD))
+
+        // Channel Rocker Buttons (Right-Thumb)
+        findViewById<View>(R.id.btn_channel_up)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            sendKeyCommand { client.channelUp() }
+        }
+        findViewById<View>(R.id.btn_channel_down)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            sendKeyCommand { client.channelDown() }
+        }
+
+        // Channel Swipe Surface (Capsule)
+        val chSwipeSurface = findViewById<View>(R.id.ch_swipe_surface)
+        val tvSwipeHint = findViewById<TextView>(R.id.tv_ch_swipe_hint)
+        var chStartX = 0f
+        var chStartY = 0f
+        var chStartTime = 0L
+        val minFlickDistPx = 30 * resources.displayMetrics.density
+        chSwipeSurface?.setOnTouchListener { v, event ->
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.parent?.requestDisallowInterceptTouchEvent(true)
+                    chStartX = event.x
+                    chStartY = event.y
+                    chStartTime = System.currentTimeMillis()
+                    true
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    v.parent?.requestDisallowInterceptTouchEvent(true)
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+                    v.parent?.requestDisallowInterceptTouchEvent(false)
+                    val dx = event.x - chStartX
+                    val dy = event.y - chStartY
+                    val duration = System.currentTimeMillis() - chStartTime
+                    if (abs(dx) > minFlickDistPx || abs(dy) > minFlickDistPx) {
+                        v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                        val isUp = if (abs(dx) >= abs(dy)) dx > 0 else dy < 0
+                        if (isUp) {
+                            tvSwipeHint?.text = "CH ▲"
+                            sendKeyCommand { client.channelUp() }
+                        } else {
+                            tvSwipeHint?.text = "CH ▼"
+                            sendKeyCommand { client.channelDown() }
+                        }
+                        tvSwipeHint?.postDelayed({ tvSwipeHint.text = "SWIPE CH" }, 600L)
+                    } else if (duration < 300) {
+                        v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                        startActivity(android.content.Intent(this, ChannelsActivity::class.java))
+                    }
+                    true
+                }
+                MotionEvent.ACTION_CANCEL -> {
+                    v.parent?.requestDisallowInterceptTouchEvent(false)
+                    true
+                }
+                else -> false
+            }
+        }
+
+        // Quick Controls Grid
+        findViewById<View>(R.id.btn_qc_guide)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            sendKeyCommand { client.pressKey("GUIDE") }
+        }
+        findViewById<View>(R.id.btn_qc_usb)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            launchUsbMediaPlayer()
+        }
+        findViewById<View>(R.id.btn_qc_subtitles)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            sendKeyCommand { client.pressKey("CC") }
+        }
+        findViewById<View>(R.id.btn_qc_more)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            sendKeyCommand { client.pressKey("QMENU") }
+        }
+
+        // Header and TV card buttons
+        findViewById<View>(R.id.btn_header_menu)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            findViewById<View>(R.id.tv_main_title)?.performClick()
+        }
+        findViewById<View>(R.id.layout_tv_title)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            findViewById<View>(R.id.tv_main_title)?.performClick()
+        }
+        findViewById<View>(R.id.btn_header_search)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            val intent = android.content.Intent(this, ChannelsActivity::class.java).apply {
+                putExtra("focus_search", true)
+            }
+            startActivity(intent)
+        }
+        findViewById<View>(R.id.btn_header_bell)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            maybeShowWhatsNew(force = true)
+        }
+        findViewById<View>(R.id.btn_card_inputs)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            findViewById<View>(R.id.btn_input)?.performClick()
+        }
+        findViewById<View>(R.id.btn_quick_apps_all)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            showAllAppsPicker()
+        }
+        findViewById<View>(R.id.btn_apps_drawer)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            showAllAppsPicker()
+        }
+
+        // Embedded Numpad Backspace and Enter
+        findViewById<View>(R.id.btn_np_backspace)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            val tv = findViewById<TextView>(R.id.tv_np_readout)
+            if (tv != null) {
+                val cur = tv.text.toString()
+                if (cur.isNotEmpty()) tv.text = cur.dropLast(1)
+            }
+            sendKeyCommand { client.pressKey("BACK") }
+        }
+
+        // Direct Channels button
+        findViewById<View>(R.id.btn_channels)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            startActivity(android.content.Intent(this, ChannelsActivity::class.java))
         }
 
         // D-pad
@@ -214,57 +363,121 @@ class MainActivity : AppCompatActivity() {
                 statusHandler.postDelayed(this, if (volumeStepping) 80 else 50)
             }
         }
-        setupPillDrag(
-            pillId = R.id.volume_pill,
-            barId  = R.id.volume_bar,
-            getLevel = { currentVolume },
-            onTapUp   = { currentVolume?.let { setVolumeState((it + 1).coerceIn(0, 100), currentMuted) }
-                          val queuedAt = keyGate.now()
-                          keyExecutor.execute { runKey(queuedAt) { client.volumeUp() };   scheduleVolumeRefresh() } },
-            onTapDown = { currentVolume?.let { setVolumeState((it - 1).coerceIn(0, 100), currentMuted) }
-                          val queuedAt = keyGate.now()
-                          keyExecutor.execute { runKey(queuedAt) { client.volumeDown() }; scheduleVolumeRefresh() } },
-            onDragEnd = { level ->
-                volumeDragging = false
-                setVolumeState(level, currentMuted)
-                if (volumeStepping) {
+        // Horizontal Volume Scrubber
+        val volContainer = findViewById<View>(R.id.vol_slider_container)
+        var lastVolHapticLevel = -1
+        volContainer?.setOnTouchListener { v, event ->
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> {
+                    v.parent?.requestDisallowInterceptTouchEvent(true)
+                    volumeDragging = true
+                    val width = v.width.coerceAtLeast(1)
+                    val fraction = (event.x / width).coerceIn(0f, 1f)
+                    val level = kotlin.math.round((fraction * 100)).toInt().coerceIn(0, 100)
+                    setVolumeState(level, currentMuted)
                     volumeDragLevel = level
+                    lastVolHapticLevel = level
+                    v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                    if (volumeSendRunnable == null) {
+                        volumeStepping = client.volumeNeedsKeys
+                        if (volumeStepping) volumeSentLevel = currentVolume ?: level
+                        volumeSendRunnable = volumeSendLoop
+                        statusHandler.post(volumeSendLoop)
+                    }
+                    true
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    v.parent?.requestDisallowInterceptTouchEvent(true)
+                    val width = v.width.coerceAtLeast(1)
+                    val fraction = (event.x / width).coerceIn(0f, 1f)
+                    val level = kotlin.math.round((fraction * 100)).toInt().coerceIn(0, 100)
+                    setVolumeState(level, currentMuted)
+                    volumeDragLevel = level
+                    if (lastVolHapticLevel == -1 || kotlin.math.abs(level - lastVolHapticLevel) >= 3) {
+                        v.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
+                        lastVolHapticLevel = level
+                    }
                     if (volumeSendRunnable == null) {
                         volumeSendRunnable = volumeSendLoop
                         statusHandler.post(volumeSendLoop)
                     }
-                    return@setupPillDrag
+                    true
                 }
-                statusHandler.removeCallbacks(volumeSendLoop)
-                volumeSendRunnable = null
-                Thread {
-                    // A send from the drag loop may still be in flight; if it lands after
-                    // this one the TV ends up at the older level, so wait it out first.
-                    val until = System.currentTimeMillis() + 1_500
-                    while (volumeSending.get() && System.currentTimeMillis() < until) Thread.sleep(20)
-                    client.setVolume(level)
-                    client.settleVolume(level)
-                    scheduleVolumeRefresh()
-                }.start()
-            },
-            onDragMove = { level ->
-                if (!volumeDragging) {
-                    volumeDragging = true
-                    if (volumeSendRunnable == null) {
-                        volumeStepping = client.volumeNeedsKeys
-                        if (volumeStepping) volumeSentLevel = currentVolume ?: level
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    v.parent?.requestDisallowInterceptTouchEvent(false)
+                    volumeDragging = false
+                    val width = v.width.coerceAtLeast(1)
+                    val fraction = (event.x / width).coerceIn(0f, 1f)
+                    val level = kotlin.math.round((fraction * 100)).toInt().coerceIn(0, 100)
+                    setVolumeState(level, currentMuted)
+                    v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                    if (volumeStepping) {
+                        volumeDragLevel = level
+                        if (volumeSendRunnable == null) {
+                            volumeSendRunnable = volumeSendLoop
+                            statusHandler.post(volumeSendLoop)
+                        }
+                    } else {
+                        statusHandler.removeCallbacks(volumeSendLoop)
+                        volumeSendRunnable = null
+                        Thread {
+                            val until = System.currentTimeMillis() + 1_500
+                            while (volumeSending.get() && System.currentTimeMillis() < until) Thread.sleep(20)
+                            client.setVolume(level)
+                            client.settleVolume(level)
+                            scheduleVolumeRefresh()
+                        }.start()
                     }
+                    true
                 }
-                volumeDragLevel = level
-                if (volumeSendRunnable == null) {
-                    volumeSendRunnable = volumeSendLoop
-                    statusHandler.post(volumeSendLoop)
+                else -> false
+            }
+        }
+
+        // Right-Thumb Volume Buttons
+        val volRepeatHandler = Handler(Looper.getMainLooper())
+        fun setupVolButton(btnId: Int, isUp: Boolean) {
+            val btn = findViewById<View>(btnId) ?: return
+            val stepVol = {
+                currentVolume?.let { cur ->
+                    val next = (if (isUp) cur + 1 else cur - 1).coerceIn(0, 100)
+                    setVolumeState(next, currentMuted)
                 }
-            },
-            sliderEnabled = { true }
-        )
-        findViewById<View>(R.id.btn_mute).setOnClickListener {
-            currentVolume?.let { v -> runOnUiThread { setVolumeState(v, !currentMuted) } }
+                val queuedAt = keyGate.now()
+                keyExecutor.execute {
+                    runKey(queuedAt) { if (isUp) client.volumeUp() else client.volumeDown() }
+                    scheduleVolumeRefresh()
+                }
+            }
+            val repeatRunnable = object : Runnable {
+                override fun run() {
+                    stepVol()
+                    btn.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
+                    volRepeatHandler.postDelayed(this, 120L)
+                }
+            }
+            btn.setOnClickListener {
+                it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                stepVol()
+            }
+            btn.setOnLongClickListener {
+                it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                volRepeatHandler.post(repeatRunnable)
+                true
+            }
+            btn.setOnTouchListener { _, event ->
+                if (event.action == MotionEvent.ACTION_UP || event.action == MotionEvent.ACTION_CANCEL) {
+                    volRepeatHandler.removeCallbacks(repeatRunnable)
+                }
+                false
+            }
+        }
+        setupVolButton(R.id.btn_volume_up, true)
+        setupVolButton(R.id.btn_volume_down, false)
+
+        val onMuteToggle = { v: View ->
+            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            currentVolume?.let { cur -> runOnUiThread { setVolumeState(cur, !currentMuted) } }
             sendKeyCommand {
                 val r = client.muteToggle()
                 statusHandler.removeCallbacks(volumeRefreshRunnable)
@@ -272,6 +485,8 @@ class MainActivity : AppCompatActivity() {
                 r
             }
         }
+        findViewById<View>(R.id.btn_vol_mute_icon)?.setOnClickListener(onMuteToggle)
+        findViewById<View>(R.id.btn_mute)?.setOnClickListener(onMuteToggle)
 
         // Right pill (brightness or channel) — configured in onResume via configureRightPill()
 
@@ -328,31 +543,55 @@ class MainActivity : AppCompatActivity() {
                R.id.btn_media_pause to "PAUSE", R.id.btn_media_ff to "FASTFORWARD")
             .forEach { (id, key) -> findViewById<View>(id).setOnClickListener { sendKeyCommand { client.pressKey(key) } } }
 
-        // Numpad mode — full-screen swap with the normal remote
-        findViewById<View>(R.id.btn_numpad).setOnClickListener {
+        // Numpad mode — toggle embedded numpad in center frame
+        findViewById<View>(R.id.btn_numpad)?.setOnClickListener {
             it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-            setNumpadMode(true)
+            if (currentMode == RemoteMode.NUMPAD) {
+                setRemoteMode(RemoteMode.DPAD)
+            } else {
+                setRemoteMode(RemoteMode.NUMPAD)
+            }
         }
-        findViewById<View>(R.id.btn_numpad_close).setOnClickListener {
+        findViewById<View>(R.id.btn_numpad)?.setOnLongClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+            startActivity(android.content.Intent(this, ChannelsActivity::class.java))
+            true
+        }
+        findViewById<View>(R.id.btn_numpad_close)?.setOnClickListener {
             it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-            setNumpadMode(false)
+            setRemoteMode(RemoteMode.DPAD)
         }
         listOf(R.id.btn_num_0, R.id.btn_num_1, R.id.btn_num_2, R.id.btn_num_3,
                R.id.btn_num_4, R.id.btn_num_5, R.id.btn_num_6, R.id.btn_num_7,
                R.id.btn_num_8, R.id.btn_num_9)
             .forEachIndexed { digit, id ->
-                findViewById<View>(id).setOnClickListener {
+                findViewById<View>(id)?.setOnClickListener {
+                    it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
                     echoReadout("$digit")
                     sendKeyCommand { client.pressKey("$digit") }
                 }
             }
-        findViewById<View>(R.id.btn_num_list).setOnClickListener { sendKeyCommand { client.pressKey("LIST") } }
-        findViewById<View>(R.id.btn_num_dash).setOnClickListener {
+        findViewById<View>(R.id.btn_num_clear)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            findViewById<TextView>(R.id.tv_np_readout)?.text = ""
+        }
+        findViewById<View>(R.id.btn_num_enter)?.setOnClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            sendKeyCommand { client.pressEnter() }
+        }
+        findViewById<View>(R.id.btn_num_list)?.setOnClickListener {
+            startActivity(android.content.Intent(this, ChannelsActivity::class.java))
+        }
+        findViewById<View>(R.id.btn_num_list)?.setOnLongClickListener {
+            sendKeyCommand { client.pressKey("LIST") }
+            true
+        }
+        findViewById<View>(R.id.btn_num_dash)?.setOnClickListener {
             echoReadout("–")
             sendKeyCommand { client.pressKey("DASH") }
         }
-        findViewById<View>(R.id.btn_np_ch_up).setOnClickListener   { sendKeyCommand { client.channelUp() } }
-        findViewById<View>(R.id.btn_np_ch_down).setOnClickListener { sendKeyCommand { client.channelDown() } }
+        findViewById<View>(R.id.btn_np_ch_up)?.setOnClickListener   { sendKeyCommand { client.channelUp() } }
+        findViewById<View>(R.id.btn_np_ch_down)?.setOnClickListener { sendKeyCommand { client.channelDown() } }
         findViewById<View>(R.id.btn_np_guide).setOnClickListener { sendKeyCommand { client.pressKey("GUIDE") } }
         findViewById<View>(R.id.btn_np_info).setOnClickListener  { sendKeyCommand { client.pressKey("INFO") } }
         findViewById<View>(R.id.btn_np_cc).setOnClickListener    { sendKeyCommand { client.pressKey("CC") } }
@@ -547,12 +786,13 @@ class MainActivity : AppCompatActivity() {
         }
         val currentThemeId = ThemeManager.getActiveThemeId(this)
         if (lastAppliedThemeId.isNotEmpty() && lastAppliedThemeId != currentThemeId) {
-            // The old instance stays on screen until the new one draws, which flashed the
-            // previous theme for a moment. Hide it and show the new background meanwhile.
-            findViewById<View>(android.R.id.content).visibility = View.INVISIBLE
-            window.setBackgroundDrawable(android.graphics.drawable.ColorDrawable(ThemeManager.getActiveTheme(this).windowBg))
-            recreate()
-            return
+            lastAppliedThemeId = currentThemeId
+            applyTheme()
+            setRemoteMode(currentMode)
+            val cachedVolume = appPrefs.getInt("last_volume", -1)
+            val cachedMuted  = appPrefs.getBoolean("last_muted", false)
+            if (cachedVolume >= 0) setVolumeState(cachedVolume, cachedMuted)
+            refreshShortcuts()
         }
         client.resumeConnection()
         configureRightPill()
@@ -710,79 +950,31 @@ class MainActivity : AppCompatActivity() {
     private fun applyRipples(theme: ThemeConfig) {
         val color = rippleColor(theme)
         listOf(R.id.btn_power, R.id.btn_dpad, R.id.btn_keyboard, R.id.btn_home, R.id.btn_mute, R.id.btn_input,
-               R.id.btn_back, R.id.btn_media, R.id.btn_settings, R.id.btn_screen_off, R.id.btn_picture,
+               R.id.btn_back, R.id.btn_media, R.id.btn_settings, R.id.btn_channels, R.id.btn_screen_off, R.id.btn_picture,
                R.id.btn_numpad, R.id.btn_colors, R.id.btn_sound,
                R.id.btn_media_rew, R.id.btn_media_play, R.id.btn_media_pause, R.id.btn_media_ff,
                R.id.btn_color_red, R.id.btn_color_green, R.id.btn_color_yellow, R.id.btn_color_blue,
-               R.id.btn_numpad_close, R.id.btn_app_settings, R.id.btn_ok)
+               R.id.btn_numpad_close, R.id.btn_app_settings, R.id.btn_ok,
+               R.id.btn_vol_mute_icon, R.id.btn_volume_down, R.id.btn_volume_up,
+               R.id.btn_channel_down, R.id.btn_channel_up, R.id.ch_swipe_surface,
+               R.id.btn_qc_guide, R.id.btn_qc_usb, R.id.btn_qc_subtitles, R.id.btn_qc_more,
+               R.id.btn_header_search, R.id.btn_apps_drawer)
             .forEach { setRipple(findViewById(it), color) }
         listOf(R.id.btn_num_0, R.id.btn_num_1, R.id.btn_num_2, R.id.btn_num_3, R.id.btn_num_4,
                R.id.btn_num_5, R.id.btn_num_6, R.id.btn_num_7, R.id.btn_num_8, R.id.btn_num_9,
                R.id.btn_num_dash, R.id.btn_num_list, R.id.btn_np_ch_up, R.id.btn_np_ch_down, R.id.btn_np_enter,
-               R.id.btn_np_guide, R.id.btn_np_info, R.id.btn_np_cc, R.id.btn_np_exit, R.id.btn_np_tv)
-            .forEach { setRipple(findViewById(it), color, 18f) }
+               R.id.btn_np_guide, R.id.btn_np_info, R.id.btn_np_cc, R.id.btn_np_exit, R.id.btn_np_tv,
+               R.id.btn_np_backspace)
+            .forEach { setRipple(findViewById(it), color, 14f) }
     }
 
     private fun applyTheme() {
         val theme = ThemeManager.getActiveTheme(this)
-        applyRipples(theme)
-        ThemeManager.applyToRoot(findViewById(R.id.main_root), theme)
-        val iconTint = ColorStateList.valueOf(theme.circleBtnIconTint)
-        listOf(R.id.btn_keyboard, R.id.btn_home, R.id.btn_input,
-               R.id.btn_back, R.id.btn_settings, R.id.btn_picture,
-               R.id.btn_sound,
-               R.id.btn_up, R.id.btn_down, R.id.btn_left, R.id.btn_right,
-               R.id.btn_mute, R.id.btn_screen_off,
-               R.id.btn_volume_up, R.id.btn_volume_down,
-               R.id.btn_brightness_up, R.id.btn_brightness_down,
-               R.id.btn_media_rew, R.id.btn_media_play, R.id.btn_media_pause, R.id.btn_media_ff, R.id.btn_media)
-            .forEach { id -> findViewById<android.widget.ImageButton>(id)?.imageTintList = iconTint }
-        // Touchpad icon is an ImageView (no button wrapper has the icon directly)
-        findViewById<android.widget.ImageView>(R.id.iv_touchpad_icon)?.imageTintList = iconTint
-        findViewById<android.widget.ImageView>(R.id.iv_dpad_icon)?.imageTintList = iconTint
-        // App settings gear: tint with primaryText so it's visible in both modes
-        findViewById<android.widget.ImageButton>(R.id.btn_app_settings)?.imageTintList =
-            ColorStateList.valueOf(theme.primaryText)
-        // OK button: slightly lighter than the d-pad ring, same text color as theme
-        val okBtn = findViewById<Button>(R.id.btn_ok)
-        okBtn?.background = GradientDrawable().apply {
-            shape = GradientDrawable.OVAL
-            setColor(theme.dpadOkBg)
-        }
-        okBtn?.setTextColor(theme.primaryText)
-        findViewById<View>(R.id.pad_surface)?.background = GradientDrawable().apply {
-            shape = GradientDrawable.RECTANGLE
-            cornerRadius = 28f * resources.displayMetrics.density
-            setColor(theme.dpadRingBg)
-        }
-        findViewById<android.widget.ImageView>(R.id.iv_pad_icon)?.imageTintList =
-            ColorStateList.valueOf(theme.secondaryText)
-        // Numpad dialer: type colors and ghost-key fills derived from the theme so the
-        // chrome-less look holds on light themes too
         val density = resources.displayMetrics.density
-        fun ghostKey() = GradientDrawable().apply {
-            cornerRadius = 18f * density
-            setColor((theme.primaryText and 0x00FFFFFF) or (0x0C shl 24))
-        }
-        findViewById<Button>(R.id.btn_numpad)?.setTextColor(theme.primaryText)
-        listOf(R.id.btn_num_0, R.id.btn_num_1, R.id.btn_num_2, R.id.btn_num_3,
-               R.id.btn_num_4, R.id.btn_num_5, R.id.btn_num_6, R.id.btn_num_7,
-               R.id.btn_num_8, R.id.btn_num_9, R.id.btn_num_dash,
-               R.id.btn_np_ch_up, R.id.btn_np_ch_down, R.id.btn_np_enter)
-            .forEach { id -> findViewById<Button>(id)?.apply {
-                setTextColor(theme.primaryText)
-                background = ghostKey()
-            } }
-        findViewById<Button>(R.id.btn_num_list)?.apply {
-            setTextColor(theme.secondaryText)
-            background = ghostKey()
-        }
 
-        listOf(R.id.btn_np_guide, R.id.btn_np_info, R.id.btn_np_cc, R.id.btn_np_exit, R.id.btn_np_tv)
-            .forEach { id -> findViewById<Button>(id)?.setTextColor(theme.secondaryText) }
-        findViewById<TextView>(R.id.tv_np_readout)?.setTextColor(
-            (theme.primaryText and 0x00FFFFFF) or (0x40 shl 24))
-        findViewById<android.widget.ImageButton>(R.id.btn_numpad_close)?.imageTintList = iconTint
+        // 1. Root & System Bars
+        findViewById<View>(R.id.main_root)?.setBackgroundColor(theme.windowBg)
+        SystemBars.applyTo(this, findViewById(R.id.main_root), theme.windowBg)
         window.statusBarColor = theme.windowBg
         window.navigationBarColor = theme.windowBg
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -792,22 +984,245 @@ class MainActivity : AppCompatActivity() {
             else
                 flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
         }
+
+        // 2. Header
+        findViewById<ImageView>(R.id.iv_header_logo)?.imageTintList = null
+        findViewById<TextView>(R.id.tv_header_brand_name)?.setTextColor(theme.btnAccentBg)
+        findViewById<TextView>(R.id.tv_header_brand_sub)?.setTextColor(theme.secondaryText)
+        findViewById<ImageButton>(R.id.btn_header_search)?.imageTintList = ColorStateList.valueOf(theme.btnAccentBg)
+        findViewById<ImageButton>(R.id.btn_app_settings)?.imageTintList = ColorStateList.valueOf(theme.primaryText)
+
+        // 3. TV Connection Card
+        findViewById<View>(R.id.tv_connection_card)?.background =
+            ThemeManager.roundRect(theme.surfaceBg, 18f, theme.btnGhostBorder, 1f, density)
+        findViewById<TextView>(R.id.tv_main_title)?.setTextColor(theme.primaryText)
+        findViewById<TextView>(R.id.tv_tv_model)?.setTextColor(theme.secondaryText)
+        findViewById<TextView>(R.id.tv_network_info)?.setTextColor(theme.secondaryText)
+        val powerBtn = findViewById<ImageButton>(R.id.btn_power)
+        powerBtn?.background = ThemeManager.oval(theme.circleBtnBg, theme.btnAccentBg, 2f, density)
+        powerBtn?.imageTintList = ColorStateList.valueOf(theme.btnAccentBg)
+
+        // 4. Quick Apps Rail
+        findViewById<View>(R.id.quick_apps_card)?.background =
+            ThemeManager.roundRect(theme.surfaceBg, 18f, theme.btnGhostBorder, 1f, density)
+        findViewById<TextView>(R.id.tv_quick_apps_title)?.setTextColor(theme.secondaryText)
+        findViewById<ImageButton>(R.id.btn_apps_drawer)?.imageTintList = ColorStateList.valueOf(theme.circleBtnIconTint)
+
+        // 5. Mode Selector Pill Container
+        findViewById<View>(R.id.mode_selector_pill)?.background =
+            ThemeManager.roundRect(theme.surfaceBg, 22f, theme.btnGhostBorder, 1f, density)
+        findViewById<View>(R.id.divider_mode_1)?.setBackgroundColor(theme.divider)
+        findViewById<View>(R.id.divider_mode_2)?.setBackgroundColor(theme.divider)
+
+        // 6. Central Surface - D-pad
+        findViewById<View>(R.id.dpad_ring_view)?.background =
+            ThemeManager.oval(theme.dpadRingBg, theme.btnAccentBg, 1.5f, density)
+        val dpadArrows = listOf(R.id.btn_up, R.id.btn_down, R.id.btn_left, R.id.btn_right)
+        dpadArrows.forEach { id ->
+            findViewById<ImageButton>(id)?.imageTintList = ColorStateList.valueOf(theme.btnAccentBg)
+        }
+        val okBtn = findViewById<Button>(R.id.btn_ok)
+        okBtn?.background = ThemeManager.oval(theme.dpadOkBg, theme.btnGhostBorder, 1f, density)
+        okBtn?.setTextColor(theme.primaryText)
+
+        // 7. Central Surface - Trackpad
+        findViewById<View>(R.id.pad_surface)?.background =
+            ThemeManager.roundRect(theme.surfaceBg, 18f, theme.btnGhostBorder, 1f, density)
+        findViewById<ImageView>(R.id.iv_pad_icon)?.imageTintList = ColorStateList.valueOf(theme.btnAccentBg)
+        findViewById<TextView>(R.id.tv_tp_hint_primary)?.setTextColor(theme.secondaryText)
+        findViewById<TextView>(R.id.tv_tp_hint_secondary)?.setTextColor(ColorUtil.withAlpha(theme.secondaryText, 0x99))
+
+        // 8. Central Surface - Embedded Numpad
+        findViewById<View>(R.id.embedded_numpad)?.background =
+            ThemeManager.roundRect(theme.surfaceBg, 18f, theme.btnGhostBorder, 1f, density)
+        findViewById<TextView>(R.id.tv_np_readout)?.setTextColor(theme.btnAccentBg)
+        val numKeys = listOf(
+            R.id.btn_num_0, R.id.btn_num_1, R.id.btn_num_2, R.id.btn_num_3,
+            R.id.btn_num_4, R.id.btn_num_5, R.id.btn_num_6, R.id.btn_num_7,
+            R.id.btn_num_8, R.id.btn_num_9
+        )
+        numKeys.forEach { id ->
+            findViewById<Button>(id)?.apply {
+                background = ThemeManager.roundRect(theme.circleBtnBg, 14f, theme.btnGhostBorder, 1f, density)
+                setTextColor(theme.primaryText)
+            }
+        }
+        findViewById<ImageButton>(R.id.btn_np_backspace)?.imageTintList = ColorStateList.valueOf(theme.btnAccentBg)
+        findViewById<Button>(R.id.btn_np_enter)?.apply {
+            background = ThemeManager.roundRect(theme.circleBtnBg, 14f, theme.btnAccentBg, 1.5f, density)
+            setTextColor(theme.btnAccentBg)
+        }
+
+        // 9. Volume Row
+        findViewById<View>(R.id.volume_card)?.background =
+            ThemeManager.roundRect(theme.surfaceBg, 18f, theme.btnGhostBorder, 1f, density)
+        findViewById<View>(R.id.vol_slider_track)?.background =
+            ThemeManager.roundRect(theme.pillBg, 3f, theme.btnGhostBorder, 0.5f, density)
+        findViewById<View>(R.id.vol_slider_thumb)?.background =
+            ThemeManager.oval(theme.btnAccentBg, theme.surfaceBg, 2f, density)
+        findViewById<ImageButton>(R.id.btn_volume_down)?.apply {
+            background = ThemeManager.roundRect(theme.circleBtnBg, 12f, theme.btnGhostBorder, 1f, density)
+            imageTintList = ColorStateList.valueOf(theme.pillLabelText)
+        }
+        findViewById<ImageButton>(R.id.btn_volume_up)?.apply {
+            background = ThemeManager.roundRect(theme.circleBtnBg, 12f, theme.btnAccentBg, 1.5f, density)
+            imageTintList = ColorStateList.valueOf(theme.btnAccentBg)
+        }
+
+        // 10. Channel Row
+        findViewById<View>(R.id.channel_card)?.background =
+            ThemeManager.roundRect(theme.surfaceBg, 18f, theme.btnGhostBorder, 1f, density)
+        findViewById<View>(R.id.ch_swipe_surface)?.background =
+            ThemeManager.roundRect(theme.pillBg, 19f, theme.btnGhostBorder, 1f, density)
+        findViewById<ImageView>(R.id.iv_ch_swipe_indicator)?.imageTintList = ColorStateList.valueOf(theme.pillLabelText)
+        findViewById<TextView>(R.id.tv_ch_swipe_hint)?.setTextColor(theme.pillLabelText)
+        findViewById<ImageButton>(R.id.btn_channel_down)?.apply {
+            background = ThemeManager.roundRect(theme.circleBtnBg, 12f, theme.btnGhostBorder, 1f, density)
+            imageTintList = ColorStateList.valueOf(theme.pillLabelText)
+        }
+        findViewById<ImageButton>(R.id.btn_channel_up)?.apply {
+            background = ThemeManager.roundRect(theme.circleBtnBg, 12f, theme.btnAccentBg, 1.5f, density)
+            imageTintList = ColorStateList.valueOf(theme.btnAccentBg)
+        }
+
+        // 11. Action Row
+        val actionButtons = listOf(R.id.btn_home, R.id.btn_back, R.id.btn_settings, R.id.btn_input, R.id.btn_mute, R.id.btn_keyboard)
+        actionButtons.forEach { id ->
+            val v = findViewById<ViewGroup>(id)
+            if (v != null) {
+                v.background = ThemeManager.roundRect(theme.circleBtnBg, 14f, theme.btnGhostBorder, 1f, density)
+                for (i in 0 until v.childCount) {
+                    val child = v.getChildAt(i)
+                    if (child is ImageView) child.imageTintList = ColorStateList.valueOf(theme.btnAccentBg)
+                    if (child is TextView) child.setTextColor(theme.pillLabelText)
+                }
+            }
+        }
+
+        // 12. Quick Controls Grid
+        findViewById<View>(R.id.quick_controls_card)?.background =
+            ThemeManager.roundRect(theme.surfaceBg, 18f, theme.btnGhostBorder, 1f, density)
+        val qcTiles = listOf(
+            R.id.btn_channels, R.id.btn_qc_guide, R.id.btn_qc_usb, R.id.btn_screen_off,
+            R.id.btn_colors, R.id.btn_picture, R.id.btn_sound, R.id.btn_qc_subtitles, R.id.btn_qc_more
+        )
+        qcTiles.forEach { id ->
+            val v = findViewById<ViewGroup>(id)
+            if (v != null) {
+                v.background = ThemeManager.roundRect(theme.circleBtnBg, 12f, theme.btnGhostBorder, 1f, density)
+                for (i in 0 until v.childCount) {
+                    val child = v.getChildAt(i)
+                    if (child is ImageView) child.imageTintList = ColorStateList.valueOf(theme.circleBtnIconTint)
+                    if (child is TextView) child.setTextColor(theme.pillLabelText)
+                }
+            }
+        }
+
+        // 13. Mode Segment & Volume & Shortuts Refresh
+        setRemoteMode(currentMode)
+        val cachedVolume = appPrefs.getInt("last_volume", -1)
+        val cachedMuted = appPrefs.getBoolean("last_muted", false)
+        if (cachedVolume >= 0) setVolumeState(cachedVolume, cachedMuted)
+
+        // 14. Ripples
+        applyRipples(theme)
+    }
+
+    fun setRemoteMode(mode: RemoteMode) {
+        currentMode = mode
+        appPrefs.edit().putString("rahabi_remote_mode", mode.name).apply()
+        val theme = ThemeManager.getActiveTheme(this)
+        val density = resources.displayMetrics.density
+
+        val btnDpad = findViewById<View>(R.id.btn_mode_dpad)
+        val btnTp = findViewById<View>(R.id.btn_mode_trackpad)
+        val btnNp = findViewById<View>(R.id.btn_mode_numpad)
+
+        val ivDpad = findViewById<ImageView>(R.id.iv_mode_dpad_icon)
+        val tvDpad = findViewById<TextView>(R.id.tv_mode_dpad_label)
+
+        val ivTp = findViewById<ImageView>(R.id.iv_mode_tp_icon)
+        val tvTp = findViewById<TextView>(R.id.tv_mode_tp_label)
+
+        val ivNp = findViewById<ImageView>(R.id.iv_mode_np_icon)
+        val tvNp = findViewById<TextView>(R.id.tv_mode_np_label)
+
+        val activeBg = { ThemeManager.roundRect(theme.circleBtnBg, 18f, theme.btnAccentBg, 1.5f, density) }
+        val inactiveBg = { ThemeManager.roundRect(android.graphics.Color.TRANSPARENT, 18f, android.graphics.Color.TRANSPARENT, 0f, density) }
+
+        btnDpad?.background = if (mode == RemoteMode.DPAD) activeBg() else inactiveBg()
+        btnTp?.background = if (mode == RemoteMode.TRACKPAD) activeBg() else inactiveBg()
+        btnNp?.background = if (mode == RemoteMode.NUMPAD) activeBg() else inactiveBg()
+
+        ivDpad?.imageTintList = ColorStateList.valueOf(if (mode == RemoteMode.DPAD) theme.btnAccentBg else theme.secondaryText)
+        tvDpad?.setTextColor(if (mode == RemoteMode.DPAD) theme.btnAccentBg else theme.secondaryText)
+
+        ivTp?.imageTintList = ColorStateList.valueOf(if (mode == RemoteMode.TRACKPAD) theme.btnAccentBg else theme.secondaryText)
+        tvTp?.setTextColor(if (mode == RemoteMode.TRACKPAD) theme.btnAccentBg else theme.secondaryText)
+
+        ivNp?.imageTintList = ColorStateList.valueOf(if (mode == RemoteMode.NUMPAD) theme.btnAccentBg else theme.secondaryText)
+        tvNp?.setTextColor(if (mode == RemoteMode.NUMPAD) theme.btnAccentBg else theme.secondaryText)
+
+        findViewById<View>(R.id.dpad_group)?.visibility = if (mode == RemoteMode.DPAD) View.VISIBLE else View.GONE
+        findViewById<View>(R.id.pad_surface)?.visibility = if (mode == RemoteMode.TRACKPAD) View.VISIBLE else View.GONE
+        findViewById<View>(R.id.embedded_numpad)?.visibility = if (mode == RemoteMode.NUMPAD) View.VISIBLE else View.GONE
+
+        if (mode == RemoteMode.TRACKPAD) {
+            client.warmPointerSession()
+        }
+    }
+
+    private fun launchUsbMediaPlayer() {
+        Toast.makeText(this, "Opening Media Player...", Toast.LENGTH_SHORT).show()
+        Thread {
+            val (apps, _) = client.listApps()
+            val mediaApp = apps.firstOrNull {
+                it.id == "com.webos.app.mediadiscovery" ||
+                it.id == "com.webos.app.mediaplayer" ||
+                it.id == "com.webos.app.photovideo" ||
+                it.title.contains("media", ignoreCase = true) ||
+                it.title.contains("photo", ignoreCase = true) ||
+                it.title.contains("usb", ignoreCase = true)
+            }
+            val targetId = mediaApp?.id ?: "com.webos.app.mediadiscovery"
+            client.launchApp(targetId)
+        }.start()
+    }
+
+    private fun showAllAppsPicker() {
+        Thread {
+            val (apps, error) = client.listApps()
+            runOnUiThread {
+                if (error != null || apps.isEmpty()) {
+                    Toast.makeText(this, error ?: "No apps found", Toast.LENGTH_SHORT).show()
+                    return@runOnUiThread
+                }
+                val items = apps.map { Triple(it.id, it.title, false) }
+                showPickerSheet("All TV Apps", items) { id ->
+                    Thread { client.launchApp(id) }.start()
+                }
+            }
+        }.start()
     }
 
     private fun setStatus(status: TvStatus) {
         tvConnected = (status == TvStatus.CONNECTED)
         val dot = findViewById<View>(R.id.status_dot)
-        val color = when (status) {
-            TvStatus.CHECKING     -> 0xFF888888.toInt()
-            TvStatus.CONNECTED    -> 0xFF4CAF50.toInt()
-            TvStatus.SEARCHING,
-            TvStatus.PAIRING      -> 0xFFFF9800.toInt()
-            TvStatus.DISCONNECTED -> 0xFFF44336.toInt()
+        val statusText = findViewById<TextView>(R.id.tv_status_text)
+        val (color, text) = when (status) {
+            TvStatus.CHECKING     -> 0xFF888888.toInt() to "Checking"
+            TvStatus.CONNECTED    -> 0xFF4CAF50.toInt() to "Connected"
+            TvStatus.SEARCHING    -> 0xFFFF9800.toInt() to "Searching"
+            TvStatus.PAIRING      -> 0xFFFF9800.toInt() to "Pairing"
+            TvStatus.DISCONNECTED -> 0xFFF44336.toInt() to "Disconnected"
         }
-        dot.background = GradientDrawable().apply {
+        dot?.background = GradientDrawable().apply {
             shape = GradientDrawable.OVAL
             setColor(color)
         }
+        statusText?.text = text
+        statusText?.setTextColor(color)
+        findViewById<TextView>(R.id.tv_network_info)?.text = client.tvIp.ifBlank { "Wi-Fi" }
     }
 
     private fun startWatching() {
@@ -934,10 +1349,10 @@ class MainActivity : AppCompatActivity() {
     // Once per update, covering every release since the app was last opened. No marker
     // means the user updated from before release notes existed, so only the current
     // release is shown. The marker is written on dismiss so a killed app shows it again.
-    private fun maybeShowWhatsNew() {
+    private fun maybeShowWhatsNew(force: Boolean = false) {
         val lastSeen = appPrefs.getInt("last_seen_version", -1)
-        if (lastSeen >= BuildConfig.VERSION_CODE) return
-        val releases = if (lastSeen < 0) ReleaseNotes.all.take(1) else ReleaseNotes.since(lastSeen)
+        if (!force && lastSeen >= BuildConfig.VERSION_CODE) return
+        val releases = if (lastSeen < 0 || force) ReleaseNotes.all.take(3) else ReleaseNotes.since(lastSeen)
         if (releases.isEmpty()) return
         showReleaseNotesDialog("What's new", releases, "Got it") {
             appPrefs.edit().putInt("last_seen_version", BuildConfig.VERSION_CODE).apply()
@@ -1028,15 +1443,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun applyPadMode() {
-        val pad = appPrefs.getBoolean(PREF_PAD_INSTEAD_OF_DPAD, false)
-        if (!pad) dpadSwapped = false
-        findViewById<View>(R.id.dpad_group).visibility = if (pad && !dpadSwapped) View.GONE else View.VISIBLE
-        findViewById<View>(R.id.pad_surface).visibility = if (pad && !dpadSwapped) View.VISIBLE else View.GONE
-        findViewById<View>(R.id.touchpad_col).visibility = if (pad) View.GONE else View.VISIBLE
-        findViewById<View>(R.id.dpad_btn_col).visibility = if (pad) View.VISIBLE else View.GONE
+        val savedMode = appPrefs.getString("rahabi_remote_mode", RemoteMode.DPAD.name) ?: RemoteMode.DPAD.name
+        setRemoteMode(runCatching { RemoteMode.valueOf(savedMode) }.getOrDefault(RemoteMode.DPAD))
     }
 
     private fun configureRightPill() {
+        if (findViewById<View>(R.id.brightness_bar) == null || findViewById<View>(R.id.brightness_pill) == null) return
         if (RightPill.get(appPrefs) == RightPill.CHANNEL) setupChannelPill()
         else setupBrightnessPill()
     }
@@ -1267,28 +1679,83 @@ class MainActivity : AppCompatActivity() {
         currentVolume = level
         currentMuted = muted
         appPrefs.edit().putInt("last_volume", level).putBoolean("last_muted", muted).apply()
-        findViewById<TextView>(R.id.volume_label)?.text = level.toString()
-        val bar = findViewById<View>(R.id.volume_bar) ?: return
-        val pillHeightPx = resources.getDimensionPixelSize(R.dimen.dpad_size)
-        val targetHeight = (pillHeightPx * level / 100f).toInt()
-        bar.layoutParams = bar.layoutParams.also { it.height = targetHeight }
-        bar.requestLayout()
-        // Gray out bar when muted
-        bar.backgroundTintList = ColorStateList.valueOf(
-            if (muted) 0x66888888.toInt() else 0x664FC3F7.toInt()
-        )
-        val muteBtn = findViewById<android.widget.ImageButton>(R.id.btn_mute)
         val theme = ThemeManager.getActiveTheme(this)
+        val density = resources.displayMetrics.density
+
+        val volLabel = findViewById<TextView>(R.id.volume_label)
+        val muteIconBtn = findViewById<android.widget.ImageButton>(R.id.btn_vol_mute_icon)
+        val actionMuteIcon = findViewById<ImageView>(R.id.iv_action_mute)
+        var actionMuteLabel: TextView? = null
+        val muteGroup = findViewById<ViewGroup>(R.id.btn_mute)
+        if (muteGroup != null) {
+            for (i in 0 until muteGroup.childCount) {
+                val child = muteGroup.getChildAt(i)
+                if (child is TextView) {
+                    actionMuteLabel = child
+                    break
+                }
+            }
+        }
+        val speakerThumb = findViewById<ImageView>(R.id.iv_volume_speaker_thumb)
+
         if (muted) {
-            muteBtn?.background = GradientDrawable().apply {
-                shape = GradientDrawable.OVAL; setColor(theme.btnAccentBg)
-            }
-            muteBtn?.imageTintList = ColorStateList.valueOf(theme.btnAccentText)
+            volLabel?.text = "0"
+            volLabel?.setTextColor(theme.secondaryText)
+            muteIconBtn?.setImageResource(R.drawable.ic_mute)
+            muteIconBtn?.imageTintList = ColorStateList.valueOf(0xFFE55353.toInt())
+            actionMuteIcon?.imageTintList = ColorStateList.valueOf(0xFFE55353.toInt())
+            actionMuteLabel?.setTextColor(0xFFE55353.toInt())
+            speakerThumb?.setImageResource(R.drawable.ic_mute)
+            speakerThumb?.imageTintList = ColorStateList.valueOf(theme.secondaryText)
         } else {
-            muteBtn?.background = GradientDrawable().apply {
-                shape = GradientDrawable.OVAL; setColor(theme.circleBtnBg)
+            volLabel?.text = level.toString()
+            volLabel?.setTextColor(theme.btnAccentBg)
+            muteIconBtn?.setImageResource(R.drawable.ic_volume_up)
+            muteIconBtn?.imageTintList = ColorStateList.valueOf(theme.btnAccentBg)
+            actionMuteIcon?.imageTintList = ColorStateList.valueOf(theme.btnAccentBg)
+            actionMuteLabel?.setTextColor(theme.secondaryText)
+            speakerThumb?.setImageResource(R.drawable.ic_volume_up)
+            speakerThumb?.imageTintList = ColorStateList.valueOf(theme.btnAccentBg)
+        }
+
+        val container = findViewById<View>(R.id.vol_slider_container)
+        val progress = findViewById<View>(R.id.vol_slider_progress)
+        val thumb = findViewById<View>(R.id.vol_slider_thumb)
+        if (container != null && progress != null && thumb != null) {
+            val updateProgress = {
+                val w = container.width
+                if (w > 0) {
+                    val thumbW = thumb.width.takeIf { it > 0 } ?: (16 * density).toInt()
+                    val fraction = (level.coerceIn(0, 100)) / 100f
+                    val progressWidth = (w * fraction).toInt()
+                    val thumbX = (w - thumbW) * fraction
+
+                    progress.layoutParams = progress.layoutParams.also { it.width = progressWidth }
+                    progress.requestLayout()
+                    thumb.translationX = thumbX
+                    if (muted) {
+                        progress.background = ThemeManager.roundRect(ColorUtil.withAlpha(theme.secondaryText, 0x66), 3f, android.graphics.Color.TRANSPARENT, 0f, density)
+                    } else {
+                        progress.background = ThemeManager.roundRect(theme.btnAccentBg, 3f, android.graphics.Color.TRANSPARENT, 0f, density)
+                    }
+                }
             }
-            muteBtn?.imageTintList = ColorStateList.valueOf(theme.circleBtnIconTint)
+            if (container.width > 0) {
+                updateProgress()
+            } else {
+                container.post { updateProgress() }
+            }
+        }
+
+        val bar = findViewById<View>(R.id.volume_bar)
+        if (bar != null) {
+            val pillHeightPx = resources.getDimensionPixelSize(R.dimen.dpad_size)
+            val targetHeight = (pillHeightPx * level / 100f).toInt()
+            bar.layoutParams = bar.layoutParams.also { it.height = targetHeight }
+            bar.requestLayout()
+            bar.backgroundTintList = ColorStateList.valueOf(
+                if (muted) 0x66888888.toInt() else theme.btnAccentBg
+            )
         }
     }
 
@@ -1318,18 +1785,36 @@ class MainActivity : AppCompatActivity() {
 
     private fun setScreenOffButton(isOff: Boolean) {
         currentScreenOff = isOff
-        val btn = findViewById<android.widget.ImageButton>(R.id.btn_screen_off) ?: return
         val theme = ThemeManager.getActiveTheme(this)
-        if (isOff) {
-            btn.background = GradientDrawable().apply {
-                shape = GradientDrawable.OVAL; setColor(theme.btnAccentBg)
+        val v = findViewById<View>(R.id.btn_screen_off) ?: return
+        when (v) {
+            is android.widget.ImageButton -> {
+                if (isOff) {
+                    v.background = GradientDrawable().apply {
+                        shape = GradientDrawable.OVAL; setColor(theme.btnAccentBg)
+                    }
+                    v.imageTintList = ColorStateList.valueOf(theme.btnAccentText)
+                } else {
+                    v.background = GradientDrawable().apply {
+                        shape = GradientDrawable.OVAL; setColor(theme.circleBtnBg)
+                    }
+                    v.imageTintList = ColorStateList.valueOf(theme.circleBtnIconTint)
+                }
             }
-            btn.imageTintList = ColorStateList.valueOf(theme.btnAccentText)
-        } else {
-            btn.background = GradientDrawable().apply {
-                shape = GradientDrawable.OVAL; setColor(theme.circleBtnBg)
+            is android.view.ViewGroup -> {
+                val icon = (0 until v.childCount).map { v.getChildAt(it) }.filterIsInstance<ImageView>().firstOrNull()
+                val label = (0 until v.childCount).map { v.getChildAt(it) }.filterIsInstance<TextView>().firstOrNull()
+                val density = resources.displayMetrics.density
+                if (isOff) {
+                    v.background = ThemeManager.roundRect(theme.circleBtnBg, 12f, theme.btnAccentBg, 1.5f, density)
+                    icon?.imageTintList = ColorStateList.valueOf(theme.btnAccentBg)
+                    label?.setTextColor(theme.btnAccentBg)
+                } else {
+                    v.background = ThemeManager.roundRect(theme.circleBtnBg, 12f, theme.btnGhostBorder, 1f, density)
+                    icon?.imageTintList = ColorStateList.valueOf(theme.circleBtnIconTint)
+                    label?.setTextColor(theme.secondaryText)
+                }
             }
-            btn.imageTintList = ColorStateList.valueOf(theme.circleBtnIconTint)
         }
     }
 
@@ -1352,72 +1837,81 @@ class MainActivity : AppCompatActivity() {
 
     private fun refreshShortcuts() {
         val container = findViewById<LinearLayout>(R.id.shortcuts_row)
+        val scrollView = findViewById<View>(R.id.shortcuts_scroll)
         container.removeAllViews()
         val shortcuts = client.loadShortcuts()
+        if (shortcuts.isEmpty()) {
+            scrollView?.visibility = View.GONE
+            return
+        }
+        scrollView?.visibility = View.VISIBLE
+
         val density = resources.displayMetrics.density
         val gap = (8 * density).toInt()
-        val rowHeight = (52 * density).toInt()
+        val chipHeight = (38 * density).toInt()
         val theme = ThemeManager.getActiveTheme(this)
 
-        // One row up to 2 shortcuts, otherwise two rows split as evenly as possible
-        val perRow = if (shortcuts.size <= 2) shortcuts.size else (shortcuts.size + 1) / 2
-        val chunks = shortcuts.chunked(perRow.coerceAtLeast(1))
+        shortcuts.forEachIndexed { index, app ->
+            val pillColor = client.loadCachedColor(app.id) ?: theme.circleBtnBg
+            val pillBg = GradientDrawable().apply {
+                shape = GradientDrawable.RECTANGLE
+                cornerRadius = 19 * density
+                setColor(pillColor)
+            }
 
-        chunks.forEachIndexed { rowIndex, chunk ->
-            val row = LinearLayout(this).apply {
+            val item = LinearLayout(this).apply {
                 orientation = LinearLayout.HORIZONTAL
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, rowHeight
-                ).also { if (rowIndex > 0) it.topMargin = gap }
+                gravity = android.view.Gravity.CENTER_VERTICAL
+                background = pillBg
+                isClickable = true
+                isFocusable = true
+                setPadding((12 * density).toInt(), 0, (14 * density).toInt(), 0)
+                setRipple(this, rippleColor(theme), 19f)
+                setOnTouchListener { v, event ->
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN -> v.animate().scaleX(0.95f).scaleY(0.95f).setDuration(70).start()
+                        MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> v.animate().scaleX(1f).scaleY(1f).setDuration(150).start()
+                    }
+                    false
+                }
+                setOnClickListener {
+                    it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+                    val gen = ++wakeHomeGen
+                    Thread {
+                        if (tvIsOn()) client.launchApp(app.id) else wakeTv(gen) { client.launchApp(app.id) }
+                    }.start()
+                }
             }
 
-            chunk.forEachIndexed { colIndex, app ->
-                val pillColor = client.loadCachedColor(app.id) ?: theme.circleBtnBg
-                val pillBg = GradientDrawable().apply {
-                    shape = GradientDrawable.RECTANGLE
-                    cornerRadius = 16 * density
-                    setColor(pillColor)
-                }
-
-                val item = LinearLayout(this).apply {
-                    orientation = LinearLayout.HORIZONTAL
-                    gravity = android.view.Gravity.CENTER
-                    background = pillBg
-                    isClickable = true
-                    isFocusable = true
-                    setRipple(this, rippleColor(theme), 16f)
-                    setOnTouchListener { v, event ->
-                        when (event.action) {
-                            MotionEvent.ACTION_DOWN -> v.animate().scaleX(0.95f).scaleY(0.95f).setDuration(70).start()
-                            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> v.animate().scaleX(1f).scaleY(1f).setDuration(150).start()
-                        }
-                        false
+            val iconBmp = client.loadCachedIcon(app.id)
+            if (iconBmp != null) {
+                val iconView = ImageView(this).apply {
+                    setImageBitmap(iconBmp)
+                    layoutParams = LinearLayout.LayoutParams((20 * density).toInt(), (20 * density).toInt()).apply {
+                        marginEnd = (6 * density).toInt()
                     }
-                    setOnClickListener {
-                        it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-                        val gen = ++wakeHomeGen
-                        Thread {
-                            if (tvIsOn()) client.launchApp(app.id) else wakeTv(gen) { client.launchApp(app.id) }
-                        }.start()
-                    }
+                    scaleType = ImageView.ScaleType.FIT_CENTER
                 }
-
-                val label = TextView(this).apply {
-                    text = app.title
-                    textSize = if (perRow >= 3) 12f else 14f
-                    setTextColor(0xFFFFFFFF.toInt())
-                    setTypeface(null, android.graphics.Typeface.BOLD)
-                    maxLines = 1
-                    ellipsize = android.text.TextUtils.TruncateAt.END
-                }
-                item.addView(label)
-
-                val params = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f)
-                if (colIndex > 0) params.marginStart = gap
-                row.addView(item, params)
+                item.addView(iconView)
             }
 
-            container.addView(row)
+            val label = TextView(this).apply {
+                text = app.title
+                textSize = 13f
+                setTextColor(0xFFFFFFFF.toInt())
+                setTypeface(null, android.graphics.Typeface.BOLD)
+                maxLines = 1
+                ellipsize = android.text.TextUtils.TruncateAt.END
+            }
+            item.addView(label)
+
+            val params = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                chipHeight
+            ).apply {
+                if (index > 0) marginStart = gap
+            }
+            container.addView(item, params)
         }
     }
 

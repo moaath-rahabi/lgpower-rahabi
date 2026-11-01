@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/editor_scroll"
+    android:tag="window_bg"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#161616"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:id="@+id/editor_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="24dp">
+
+        <!-- Header: Title + Close Button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:tag="title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Edit Channel"
+                android:textColor="#FFFFFF"
+                android:textSize="19sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/btn_editor_close"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_close"
+                android:tint="#AAAAAA"
+                android:scaleType="centerInside"
+                android:contentDescription="Close" />
+        </LinearLayout>
+
+        <!-- Read-only Original Information -->
+        <LinearLayout
+            android:tag="surface_bg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_settings_card"
+            android:padding="14dp"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:tag="section_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Original TV Channel"
+                    android:textColor="#8E8E93"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="true" />
+
+                <TextView
+                    android:id="@+id/txt_edit_source_badge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TV"
+                    android:textColor="#C5A059"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
+                    android:background="@drawable/bg_ghost_key" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txt_edit_orig_number"
+                android:tag="row_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CH 42"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:id="@+id/txt_edit_orig_name"
+                android:tag="row_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Original Name"
+                android:textColor="#CCCCCC"
+                android:textSize="14sp"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+
+        <!-- Custom Display Name -->
+        <TextView
+            android:tag="section_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Custom Display Name"
+            android:textColor="#8E8E93"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp" />
+
+        <EditText
+            android:id="@+id/edit_custom_name"
+            android:tag="surface_bg"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:minHeight="48dp"
+            android:background="@drawable/bg_settings_input"
+            android:paddingHorizontal="14dp"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:hint="Leave empty to use original"
+            android:textColorHint="#666666"
+            android:singleLine="true"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Shortcut Number -->
+        <TextView
+            android:tag="section_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Custom Shortcut Number"
+            android:textColor="#8E8E93"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="6dp" />
+
+        <EditText
+            android:id="@+id/edit_custom_shortcut"
+            android:tag="surface_bg"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:minHeight="48dp"
+            android:background="@drawable/bg_settings_input"
+            android:paddingHorizontal="14dp"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:hint="e.g. 10, 101, 296"
+            android:textColorHint="#666666"
+            android:inputType="number"
+            android:maxLength="8"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/txt_shortcut_warning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Shortcut already used by another channel!"
+            android:textColor="#FF453A"
+            android:textSize="12sp"
+            android:layout_marginTop="4dp"
+            android:visibility="gone" />
+
+        <!-- Toggles: Favorite & Hidden -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="10dp">
+
+            <CheckBox
+                android:id="@+id/chk_favorite"
+                android:tag="row_label"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:minHeight="48dp"
+                android:layout_weight="1"
+                android:text="Favorite (★)"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+
+            <CheckBox
+                android:id="@+id/chk_hidden"
+                android:tag="row_label"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:minHeight="48dp"
+                android:layout_weight="1"
+                android:text="Hide Channel"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Groups Section Header + Add Group Action -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="6dp">
+
+            <TextView
+                android:tag="section_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Channel Groups"
+                android:textColor="#8E8E93"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btn_editor_add_group"
+                style="@style/GhostText"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:minHeight="36dp"
+                android:text="+ Add Group"
+                android:textSize="12sp"
+                android:textColor="#C5A059"
+                android:paddingHorizontal="8dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_no_groups_editor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No custom groups yet. Tap + Add Group to create one."
+            android:textColor="#666666"
+            android:textSize="13sp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/groups_checkbox_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Dialog Footer Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="16dp">
+
+            <Button
+                android:id="@+id/btn_editor_reset"
+                style="@style/GhostText"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:minHeight="48dp"
+                android:text="Reset Channel"
+                android:textColor="#FF453A"
+                android:textSize="13sp"
+                android:paddingHorizontal="8dp" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btn_editor_cancel"
+                style="@style/GhostText"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:minHeight="48dp"
+                android:text="Cancel"
+                android:textColor="#AAAAAA"
+                android:textSize="14sp"
+                android:paddingHorizontal="14dp"
+                android:layout_marginEnd="6dp" />
+
+            <Button
+                android:id="@+id/btn_editor_save"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:minHeight="48dp"
+                android:text="Save"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:background="@drawable/bg_btn_accent"
+                android:paddingHorizontal="22dp" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
