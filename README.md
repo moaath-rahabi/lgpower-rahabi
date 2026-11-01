@@ -71,12 +71,11 @@ No accounts, no advertisements, no tracking, and no cloud dependency — complet
 <p align="center">
   <img src="screenshots/01_remote_home.png" width="31%" alt="Main Remote Right-Handed Layout">
   <img src="screenshots/02_channels.png" width="31%" alt="Advanced Channels Screen">
-  <img src="screenshots/03_channel_editor.png" width="31%" alt="Channel Editor & Customization">
 </p>
 
 <p align="center">
+  <img src="screenshots/03_channel_editor.png" width="31%" alt="Channel Editor & Customization">
   <img src="screenshots/04_about.png" width="48%" alt="About Screen & Credits">
-  <img src="screenshots/05_apps_drawer.png" width="48%" alt="Apps Drawer">
 </p>
 
 ---
