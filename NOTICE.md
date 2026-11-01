@@ -1,4 +1,4 @@
-﻿# Notice & Attribution
+# Notice & Attribution
 
 ## Rahabi LG Power — Community Edition
 
@@ -30,7 +30,7 @@ The modifications and enhancements in this repository were developed by:
 ## Source Code Availability & Distribution
 
 In compliance with the GNU Affero General Public License v3.0, the complete corresponding source code for Rahabi LG Power is publicly available at:
-https://github.com/moaath-rahabi/Rahabi-LG-Power
+https://github.com/moaath-rahabi/lgpower-rahabi
 
 ---
 

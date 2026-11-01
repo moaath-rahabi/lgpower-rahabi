@@ -1,4 +1,4 @@
-﻿package com.nic.lgpower
+package com.nic.lgpower
 
 import android.content.Intent
 import android.net.Uri
@@ -50,7 +50,10 @@ class AboutActivity : AppCompatActivity() {
             openUrl("https://github.com/Nicsilver/LGPower")
         }
         findViewById<View>(R.id.row_link_repo).setOnClickListener {
-            openUrl("https://github.com/moaath-rahabi/Rahabi-LG-Power")
+            openUrl("https://github.com/moaath-rahabi/lgpower-rahabi")
+        }
+        findViewById<View>(R.id.row_link_release)?.setOnClickListener {
+            openUrl("https://github.com/moaath-rahabi/lgpower-rahabi/releases/latest")
         }
 
         // Release notes

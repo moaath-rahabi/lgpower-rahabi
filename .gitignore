@@ -21,8 +21,12 @@ dump.xml
 *.log
 scratch/
 rollback.ps1
-setup.png
-channels_activity.png
-editor_dialog.png
-main_activity.png
-screenshots/
+
+# Test screencaps (keep only official 01-05 screenshots)
+screenshots/verify_*
+screenshots/test_*
+screenshots/channel_*
+screenshots/channels_*
+screenshots/manage_*
+screenshots/responsive_*
+screenshots/improved_*

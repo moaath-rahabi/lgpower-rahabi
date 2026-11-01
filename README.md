@@ -1,4 +1,4 @@
-﻿<p align="center">
+<p align="center">
   <img src="store/rahabi_logo_full.png" width="380" alt="Rahabi LG Power Official Branding">
 </p>
 
@@ -13,6 +13,12 @@
   <img src="https://img.shields.io/badge/Android-8.0%2B%20(API%2026%E2%80%9336)-success.svg" alt="Android 8.0+">
   <img src="https://img.shields.io/badge/LG%20webOS-2014%E2%80%932026-orange.svg" alt="webOS 2014-2026">
   <img src="https://img.shields.io/badge/Version-1.40.1%20Community%20Edition-gold.svg" alt="Version 1.40.1">
+</p>
+
+<p align="center">
+  <a href="https://github.com/moaath-rahabi/lgpower-rahabi/releases/latest">
+    <img src="https://img.shields.io/badge/Download_APK-v1.40.1_Community_Edition-D4AF37?style=for-the-badge&logo=android&logoColor=white" alt="Download Latest Release APK">
+  </a>
 </p>
 
 ---
@@ -63,9 +69,14 @@ No accounts, no advertisements, no tracking, and no cloud dependency — complet
 ## Screenshots
 
 <p align="center">
-  <img src="screenshots/improved_main_remote.png" width="31%" alt="Main Remote Right-Handed Layout">
-  <img src="screenshots/channels_screen_tapped.png" width="31%" alt="Advanced Channels Screen">
-  <img src="screenshots/responsive_editor_dialog.png" width="31%" alt="Channel Editor & Customization">
+  <img src="screenshots/01_remote_home.png" width="31%" alt="Main Remote Right-Handed Layout">
+  <img src="screenshots/02_channels.png" width="31%" alt="Advanced Channels Screen">
+  <img src="screenshots/03_channel_editor.png" width="31%" alt="Channel Editor & Customization">
+</p>
+
+<p align="center">
+  <img src="screenshots/04_about.png" width="48%" alt="About Screen & Credits">
+  <img src="screenshots/05_apps_drawer.png" width="48%" alt="Apps Drawer">
 </p>
 
 ---
@@ -100,8 +111,8 @@ No accounts, no advertisements, no tracking, and no cloud dependency — complet
 - JDK 17 or newer
 
 ```bash
-git clone https://github.com/moaath-rahabi/Rahabi-LG-Power.git
-cd Rahabi-LG-Power
+git clone https://github.com/moaath-rahabi/lgpower-rahabi.git
+cd lgpower-rahabi
 ./gradlew assembleDebug
 ```
 

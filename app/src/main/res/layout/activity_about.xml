@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/about_root"
@@ -325,6 +325,40 @@
                         android:src="@drawable/ic_chevron_right"
                         android:scaleType="fitCenter"
                         app:tint="#555555" />
+
+                </LinearLayout>
+
+                <View android:tag="divider" android:layout_width="match_parent" android:layout_height="1dp" android:background="#242424" android:layout_marginStart="16dp" />
+
+                <!-- Download Latest Release (APK) -->
+                <LinearLayout
+                    android:id="@+id/row_link_release"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="12dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+
+                    <TextView
+                        android:tag="row_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Download Latest Release (APK)"
+                        android:textColor="#D4AF37"
+                        android:textStyle="bold"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_chevron_right"
+                        android:scaleType="fitCenter"
+                        app:tint="#D4AF37" />
 
                 </LinearLayout>
 
