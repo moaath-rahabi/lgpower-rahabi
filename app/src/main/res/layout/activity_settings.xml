@@ -156,36 +156,50 @@
             <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#242424" android:tag="divider" android:layout_marginStart="16dp" />
 
             <LinearLayout
+                android:id="@+id/row_default_remote_mode"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
                 android:paddingStart="16dp"
-                android:paddingEnd="12dp">
+                android:paddingEnd="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
 
                 <TextView
                     android:tag="row_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/label_channel_pill"
+                    android:text="@string/row_default_remote_mode"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp" />
 
-                <Switch
-                    android:id="@+id/switch_channel_pill"
+                <TextView
+                    android:id="@+id/tv_default_remote_mode"
+                    android:tag="row_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:scaleX="1.2"
-                    android:scaleY="1.2"
-                    android:thumbTint="@color/switch_thumb"
-                    android:trackTint="@color/switch_track" />
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/default_mode_remember"
+                    android:textColor="#8E8E93"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_chevron_right"
+                    android:scaleType="fitCenter"
+                    android:autoMirrored="true"
+                    android:tint="#555555" />
 
             </LinearLayout>
 
             <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#242424" android:tag="divider" android:layout_marginStart="16dp" />
 
             <LinearLayout
+                android:id="@+id/row_haptic_feedback"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="52dp"
@@ -205,7 +219,7 @@
                         android:tag="row_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/label_touchpad_switch"
+                        android:text="@string/label_haptic_feedback"
                         android:textColor="#FFFFFF"
                         android:textSize="15sp" />
 
@@ -214,14 +228,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="@string/desc_touchpad_switch"
+                        android:text="@string/desc_haptic_feedback"
                         android:textColor="#8E8E93"
                         android:textSize="12sp" />
 
                 </LinearLayout>
 
                 <Switch
-                    android:id="@+id/switch_pad_instead_of_dpad"
+                    android:id="@+id/switch_haptic_feedback"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"

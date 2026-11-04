@@ -149,16 +149,47 @@ class MainActivity : AppCompatActivity() {
                 runCatching { irManager.transmit(38000, LGPowerWidget.LG_POWER_PATTERN) }
             true
         }
-        findViewById<View>(R.id.btn_power).setOnClickListener {
-            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+        findViewById<View>(R.id.btn_power)?.setOnClickListener {
+            performHaptic(it)
             val gen = ++wakeHomeGen
             Thread {
                 if (tvIsOn()) client.turnOff() else wakeTv(gen) { client.afterWake() }
             }.start()
         }
 
+        // Reconnect / Refresh Button
+        findViewById<View>(R.id.btn_reconnect)?.setOnClickListener { view ->
+            performHaptic(view)
+            view.animate().rotationBy(360f).setDuration(600).start()
+            setStatus(TvStatus.CHECKING)
+            client.resumeConnection()
+            startWatching()
+            if (client.tvIp.isBlank()) {
+                autoDiscover()
+            } else {
+                Thread {
+                    client.warmPointerSession()
+                    val presence = client.awaitPresence(2_500)
+                    runOnUiThread {
+                        applyPresence(presence)
+                        val msg = if (tvConnected) getString(R.string.tv_status_connected) else getString(R.string.tv_status_reconnecting)
+                        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+                    }
+                }.start()
+            }
+        }
+        findViewById<View>(R.id.btn_reconnect)?.setOnLongClickListener { view ->
+            performHaptic(view)
+            view.animate().rotationBy(720f).setDuration(800).start()
+            setStatus(TvStatus.SEARCHING)
+            autoDiscover()
+            Toast.makeText(this, getString(R.string.reconnecting_toast), Toast.LENGTH_SHORT).show()
+            true
+        }
+
         // Screen Off — WiFi
-        findViewById<View>(R.id.btn_screen_off).setOnClickListener {
+        findViewById<View>(R.id.btn_screen_off)?.setOnClickListener {
+            performHaptic(it)
             if (currentScreenOff) return@setOnClickListener
             setScreenOffButton(true)
             sendCommand { client.turnOffScreen() }
@@ -167,19 +198,28 @@ class MainActivity : AppCompatActivity() {
         // Direct Channels button
         // Mode selector clicks
         findViewById<View>(R.id.btn_mode_dpad)?.setOnClickListener {
-            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            performHaptic(it)
             setRemoteMode(RemoteMode.DPAD)
         }
         findViewById<View>(R.id.btn_mode_trackpad)?.setOnClickListener {
-            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            performHaptic(it)
             setRemoteMode(RemoteMode.TRACKPAD)
         }
         findViewById<View>(R.id.btn_mode_numpad)?.setOnClickListener {
-            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            performHaptic(it)
             setRemoteMode(RemoteMode.NUMPAD)
         }
-        val savedMode = appPrefs.getString("rahabi_remote_mode", RemoteMode.DPAD.name) ?: RemoteMode.DPAD.name
-        setRemoteMode(runCatching { RemoteMode.valueOf(savedMode) }.getOrDefault(RemoteMode.DPAD))
+        val defaultModePref = appPrefs.getString("default_remote_mode", "LAST_USED") ?: "LAST_USED"
+        val initialMode = when (defaultModePref) {
+            "DPAD" -> RemoteMode.DPAD
+            "TRACKPAD" -> RemoteMode.TRACKPAD
+            "NUMPAD" -> RemoteMode.NUMPAD
+            else -> {
+                val savedMode = appPrefs.getString("rahabi_remote_mode", RemoteMode.DPAD.name) ?: RemoteMode.DPAD.name
+                runCatching { RemoteMode.valueOf(savedMode) }.getOrDefault(RemoteMode.DPAD)
+            }
+        }
+        setRemoteMode(initialMode)
 
         // Channel Rocker Buttons (Right-Thumb)
         findViewById<View>(R.id.btn_channel_up)?.setOnClickListener {
@@ -241,22 +281,36 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Media Playback Bar
+        findViewById<View>(R.id.btn_media_rewind)?.setOnClickListener {
+            performHaptic(it)
+            sendKeyCommand { client.mediaRewind() }
+        }
+        findViewById<View>(R.id.btn_media_play)?.setOnClickListener {
+            performHaptic(it)
+            sendKeyCommand { client.mediaPlay() }
+        }
+        findViewById<View>(R.id.btn_media_pause)?.setOnClickListener {
+            performHaptic(it)
+            sendKeyCommand { client.mediaPause() }
+        }
+        findViewById<View>(R.id.btn_media_stop)?.setOnClickListener {
+            performHaptic(it)
+            sendKeyCommand { client.mediaStop() }
+        }
+        findViewById<View>(R.id.btn_media_forward)?.setOnClickListener {
+            performHaptic(it)
+            sendKeyCommand { client.mediaFastForward() }
+        }
+
         // Quick Controls Grid
         findViewById<View>(R.id.btn_qc_guide)?.setOnClickListener {
-            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            performHaptic(it)
             sendKeyCommand { client.pressKey("GUIDE") }
         }
-        findViewById<View>(R.id.btn_qc_usb)?.setOnClickListener {
-            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-            launchUsbMediaPlayer()
-        }
         findViewById<View>(R.id.btn_qc_subtitles)?.setOnClickListener {
-            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            performHaptic(it)
             sendKeyCommand { client.pressKey("CC") }
-        }
-        findViewById<View>(R.id.btn_qc_more)?.setOnClickListener {
-            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-            sendKeyCommand { client.pressKey("QMENU") }
         }
 
         // Header and TV card buttons
@@ -506,43 +560,18 @@ class MainActivity : AppCompatActivity() {
             }.start()
         }
 
-        // Picture mode
-        findViewById<View>(R.id.btn_picture).setOnClickListener {
-            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-            showPicturePicker()
-        }
 
-        // Sound mode
-        findViewById<View>(R.id.btn_sound).setOnClickListener {
-            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-            showSoundPicker()
-        }
-
-        // Color buttons — tap Colors to show; row stays up so colors can be spammed,
-        // only a tap outside it (dispatchTouchEvent) restores the normal row
-        findViewById<View>(R.id.btn_colors).setOnClickListener {
-            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-            if (!colorRowJustDismissed) {
-                slideRowId = R.id.color_buttons_row
-                colorRowOpen = true
-                slideRow().visibility = View.VISIBLE
-                findViewById<View>(R.id.normal_bottom_row).visibility = View.GONE
-            }
-        }
-        findViewById<View>(R.id.btn_media).setOnClickListener {
-            it.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-            if (!colorRowJustDismissed) {
-                slideRowId = R.id.media_buttons_row
-                colorRowOpen = true
-                slideRow().visibility = View.VISIBLE
-                findViewById<View>(R.id.normal_bottom_row).visibility = View.GONE
+        // Color buttons — toggle color buttons row
+        findViewById<View>(R.id.btn_colors)?.setOnClickListener {
+            performHaptic(it)
+            val colorsRow = findViewById<View>(R.id.color_buttons_row)
+            if (colorsRow != null) {
+                colorsRow.visibility = if (colorsRow.visibility == View.VISIBLE) View.GONE else View.VISIBLE
             }
         }
         listOf(R.id.btn_color_red to "RED", R.id.btn_color_green to "GREEN",
-               R.id.btn_color_yellow to "YELLOW", R.id.btn_color_blue to "BLUE",
-               R.id.btn_media_rew to "REWIND", R.id.btn_media_play to "PLAY",
-               R.id.btn_media_pause to "PAUSE", R.id.btn_media_ff to "FASTFORWARD")
-            .forEach { (id, key) -> findViewById<View>(id).setOnClickListener { sendKeyCommand { client.pressKey(key) } } }
+               R.id.btn_color_yellow to "YELLOW", R.id.btn_color_blue to "BLUE")
+            .forEach { (id, key) -> findViewById<View>(id)?.setOnClickListener { sendKeyCommand { client.pressKey(key) } } }
 
         // Numpad mode — toggle embedded numpad in center frame
         findViewById<View>(R.id.btn_numpad)?.setOnClickListener {
@@ -796,6 +825,16 @@ class MainActivity : AppCompatActivity() {
             refreshShortcuts()
         }
         client.resumeConnection()
+        val defaultModePref = appPrefs.getString("default_remote_mode", "LAST_USED") ?: "LAST_USED"
+        if (defaultModePref != "LAST_USED") {
+            val prefMode = when (defaultModePref) {
+                "DPAD" -> RemoteMode.DPAD
+                "TRACKPAD" -> RemoteMode.TRACKPAD
+                "NUMPAD" -> RemoteMode.NUMPAD
+                else -> currentMode
+            }
+            if (currentMode != prefMode) setRemoteMode(prefMode)
+        }
         configureRightPill()
         applyPadMode()
         // A phone parked as a dedicated remote shouldn't dim to black between presses
@@ -950,15 +989,15 @@ class MainActivity : AppCompatActivity() {
     // The d-pad arrows are left out: the sector highlight is their press visual, a ripple on top doubled it
     private fun applyRipples(theme: ThemeConfig) {
         val color = rippleColor(theme)
-        listOf(R.id.btn_power, R.id.btn_dpad, R.id.btn_keyboard, R.id.btn_home, R.id.btn_mute, R.id.btn_input,
-               R.id.btn_back, R.id.btn_media, R.id.btn_settings, R.id.btn_channels, R.id.btn_screen_off, R.id.btn_picture,
-               R.id.btn_numpad, R.id.btn_colors, R.id.btn_sound,
-               R.id.btn_media_rew, R.id.btn_media_play, R.id.btn_media_pause, R.id.btn_media_ff,
+        listOf(R.id.btn_power, R.id.btn_reconnect, R.id.btn_dpad, R.id.btn_keyboard, R.id.btn_home, R.id.btn_mute, R.id.btn_input,
+               R.id.btn_back, R.id.btn_settings, R.id.btn_channels, R.id.btn_screen_off,
+               R.id.btn_numpad, R.id.btn_colors,
+               R.id.btn_media_rewind, R.id.btn_media_play, R.id.btn_media_pause, R.id.btn_media_stop, R.id.btn_media_forward,
                R.id.btn_color_red, R.id.btn_color_green, R.id.btn_color_yellow, R.id.btn_color_blue,
                R.id.btn_numpad_close, R.id.btn_app_settings, R.id.btn_ok,
                R.id.btn_vol_mute_icon, R.id.btn_volume_down, R.id.btn_volume_up,
                R.id.btn_channel_down, R.id.btn_channel_up, R.id.ch_swipe_surface,
-               R.id.btn_qc_guide, R.id.btn_qc_usb, R.id.btn_qc_subtitles, R.id.btn_qc_more,
+               R.id.btn_qc_guide, R.id.btn_qc_subtitles,
                R.id.btn_header_search, R.id.btn_apps_drawer)
             .forEach { setRipple(findViewById(it), color) }
         listOf(R.id.btn_num_0, R.id.btn_num_1, R.id.btn_num_2, R.id.btn_num_3, R.id.btn_num_4,
@@ -1104,8 +1143,8 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.quick_controls_card)?.background =
             ThemeManager.roundRect(theme.surfaceBg, 18f, theme.btnGhostBorder, 1f, density)
         val qcTiles = listOf(
-            R.id.btn_channels, R.id.btn_qc_guide, R.id.btn_qc_usb, R.id.btn_screen_off,
-            R.id.btn_colors, R.id.btn_picture, R.id.btn_sound, R.id.btn_qc_subtitles, R.id.btn_qc_more
+            R.id.btn_media_rewind, R.id.btn_media_play, R.id.btn_media_pause, R.id.btn_media_stop, R.id.btn_media_forward,
+            R.id.btn_channels, R.id.btn_qc_guide, R.id.btn_qc_subtitles, R.id.btn_screen_off, R.id.btn_colors
         )
         qcTiles.forEach { id ->
             val v = findViewById<ViewGroup>(id)
@@ -2226,9 +2265,17 @@ class MainActivity : AppCompatActivity() {
         runCommand({ try { runKey(queuedAt, block) } finally { keyBacklog.decrementAndGet() } }) { keyExecutor.execute(it) }
     }
 
+    private fun performHaptic(v: View?) {
+        if (v != null && appPrefs.getBoolean("pref_haptic_feedback", true)) {
+            v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+        }
+    }
+
     // A null result is a press skipped behind a failed one, which already toasted
     private fun runCommand(block: () -> WebOsClient.Result?, launch: (Runnable) -> Unit) {
-        window.decorView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+        if (appPrefs.getBoolean("pref_haptic_feedback", true)) {
+            window.decorView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+        }
         launch(Runnable {
             val result = block()
             runOnUiThread {

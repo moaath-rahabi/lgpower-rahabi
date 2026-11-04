@@ -56,6 +56,7 @@ class ChannelsActivity : AppCompatActivity() {
         loadLocalData()
         buildGroupChips()
         applyFilters()
+        scrollToActiveChannel()
 
         checkCurrentChannel()
         if (allChannels.isEmpty()) {
@@ -140,9 +141,23 @@ class ChannelsActivity : AppCompatActivity() {
                 runOnUiThread {
                     currentChannelId = current.id
                     adapter.setCurrentChannel(current.id)
+                    scrollToActiveChannel()
                 }
             }
         }.start()
+    }
+
+    private fun scrollToActiveChannel() {
+        val targetId = currentChannelId ?: allChannels.firstOrNull { it.reportedCurrent }?.id ?: return
+        val pos = adapter.getPositionForChannelId(targetId)
+        if (pos >= 0) {
+            val recycler = findViewById<RecyclerView>(R.id.channels_recycler) ?: return
+            recycler.post {
+                val lm = recycler.layoutManager as? LinearLayoutManager ?: return@post
+                val offset = maxOf(0, (recycler.height / 2) - (64 * resources.displayMetrics.density / 2).toInt())
+                lm.scrollToPositionWithOffset(pos, offset)
+            }
+        }
     }
 
     private fun fetchChannels(forced: Boolean) {
@@ -163,6 +178,7 @@ class ChannelsActivity : AppCompatActivity() {
                     }
                     buildGroupChips()
                     applyFilters()
+                    scrollToActiveChannel()
                     Toast.makeText(this, "Loaded ${list.size} channels", Toast.LENGTH_SHORT).show()
                 } else {
                     if (allChannels.isEmpty()) {
@@ -233,6 +249,7 @@ class ChannelsActivity : AppCompatActivity() {
                 if (res is WebOsClient.Result.Success) {
                     currentChannelId = channelId
                     adapter.setCurrentChannel(channelId)
+                    scrollToActiveChannel()
                 } else if (res is WebOsClient.Result.Error) {
                     Toast.makeText(this, "Tune error: ${res.message}", Toast.LENGTH_SHORT).show()
                 }

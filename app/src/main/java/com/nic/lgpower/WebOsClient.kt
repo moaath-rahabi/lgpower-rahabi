@@ -1136,6 +1136,12 @@ class WebOsClient(appContext: Context) {
     fun channelUp()     = pressKey("CHANNELUP")
     fun channelDown()   = pressKey("CHANNELDOWN")
 
+    fun mediaPlay(): Result = pressKey("PLAY").let { if (it is Result.Success) it else execute("ssap://media.controls/play") }
+    fun mediaPause(): Result = pressKey("PAUSE").let { if (it is Result.Success) it else execute("ssap://media.controls/pause") }
+    fun mediaStop(): Result = pressKey("STOP").let { if (it is Result.Success) it else execute("ssap://media.controls/stop") }
+    fun mediaRewind(): Result = pressKey("REWIND").let { if (it is Result.Success) it else execute("ssap://media.controls/rewind") }
+    fun mediaFastForward(): Result = pressKey("FASTFORWARD").let { if (it is Result.Success) it else execute("ssap://media.controls/fastForward") }
+
     fun openChannel(channelId: String): Result {
         return execute(ChannelProtocol.OPEN_CHANNEL_URI, JSONObject().put("channelId", channelId))
     }

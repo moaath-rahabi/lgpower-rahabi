@@ -1,4 +1,4 @@
-﻿package com.nic.lgpower
+package com.nic.lgpower
 
 import android.view.LayoutInflater
 import android.view.View
@@ -31,6 +31,11 @@ class ChannelsAdapter(
     fun setCurrentChannel(channelId: String?) {
         currentChannelId = channelId
         notifyDataSetChanged()
+    }
+
+    fun getPositionForChannelId(channelId: String?): Int {
+        if (channelId.isNullOrBlank()) return -1
+        return channels.indexOfFirst { it.id == channelId }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChannelViewHolder {
@@ -89,6 +94,23 @@ class ChannelsAdapter(
             }
             txtSource.text = sourceText
             txtLive.visibility = if (isCurrent) View.VISIBLE else View.GONE
+
+            if (isCurrent) {
+                val dp = itemView.resources.displayMetrics.density
+                val highlightBg = android.graphics.drawable.GradientDrawable().apply {
+                    shape = android.graphics.drawable.GradientDrawable.RECTANGLE
+                    cornerRadius = 8f * dp
+                    setColor(0x22D4AF37.toInt())
+                    setStroke((1.5f * dp).toInt(), 0xFFD4AF37.toInt())
+                }
+                itemView.background = highlightBg
+                txtNumber.setTextColor(0xFFE6C65A.toInt())
+            } else {
+                val outValue = android.util.TypedValue()
+                itemView.context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
+                itemView.setBackgroundResource(outValue.resourceId)
+                txtNumber.setTextColor(0xFFFFFFFF.toInt())
+            }
 
             btnFav.setImageResource(if (isFav) R.drawable.ic_star_filled else R.drawable.ic_star_outline)
 

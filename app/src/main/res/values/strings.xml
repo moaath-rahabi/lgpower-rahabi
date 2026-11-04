@@ -191,4 +191,25 @@
     <string name="shortcuts_summary_format">Tap to add or remove · Long-press to reorder · %d/8 selected</string>
     <string name="channels_syncing">Syncing from TV…</string>
     <string name="channels_cached_format">%d cached channels (TV unreachable)</string>
+
+    <!-- Media Controls -->
+    <string name="media_rewind">Rewind</string>
+    <string name="media_play">Play</string>
+    <string name="media_pause">Pause</string>
+    <string name="media_stop">Stop</string>
+    <string name="media_fast_forward">Forward</string>
+
+    <!-- Settings: Default Mode & Haptics -->
+    <string name="row_default_remote_mode">Default Remote Mode</string>
+    <string name="dialog_default_remote_mode">Default Mode on Launch</string>
+    <string name="default_mode_remember">Remember Last Used</string>
+    <string name="default_mode_dpad">D-Pad (Arrows)</string>
+    <string name="default_mode_touchpad">Touchpad</string>
+    <string name="default_mode_numpad">Numpad</string>
+    <string name="label_haptic_feedback">Haptic Feedback</string>
+    <string name="desc_haptic_feedback">Gentle vibration on button press</string>
+
+    <!-- Reconnect -->
+    <string name="reconnect_desc">Reconnect to TV</string>
+    <string name="reconnecting_toast">Reconnecting to TV…</string>
 </resources>

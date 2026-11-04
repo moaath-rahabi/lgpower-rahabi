@@ -58,17 +58,17 @@ class SettingsActivity : AppCompatActivity() {
         switchKeepScreenOn.isChecked     = prefs.getBoolean("keep_screen_on", false)
         refreshWakeActionLabel()
         findViewById<View>(R.id.row_wake_action).setOnClickListener { openWakeActionPicker() }
-        val switchChannelPill = findViewById<Switch>(R.id.switch_channel_pill)
-        switchChannelPill.isChecked = RightPill.get(prefs) == RightPill.CHANNEL
-        switchChannelPill.setOnCheckedChangeListener { _, v ->
-            RightPill.set(prefs, if (v) RightPill.CHANNEL else RightPill.BRIGHTNESS)
+
+        refreshDefaultRemoteModeLabel()
+        findViewById<View>(R.id.row_default_remote_mode)?.setOnClickListener { openDefaultRemoteModePicker() }
+
+        val switchHaptic = findViewById<Switch>(R.id.switch_haptic_feedback)
+        switchHaptic.isChecked = prefs.getBoolean("pref_haptic_feedback", true)
+        switchHaptic.setOnCheckedChangeListener { _, isChecked ->
+            prefs.edit().putBoolean("pref_haptic_feedback", isChecked).apply()
         }
-        val switchPad = findViewById<Switch>(R.id.switch_pad_instead_of_dpad)
-        switchPad.isChecked = prefs.getBoolean(MainActivity.PREF_PAD_INSTEAD_OF_DPAD, false)
-        switchPad.setOnCheckedChangeListener { _, v ->
-            prefs.edit().putBoolean(MainActivity.PREF_PAD_INSTEAD_OF_DPAD, v).apply()
-        }
-        listOf(switchKeepScreenOn, switchChannelPill, switchPad).forEach { makeRowToggle(it) }
+
+        listOf(switchKeepScreenOn, switchHaptic).forEach { makeRowToggle(it) }
         switchKeepScreenOn.setOnCheckedChangeListener { sw, v ->
             if (!v) { prefs.edit().putBoolean("keep_screen_on", false).apply(); return@setOnCheckedChangeListener }
             if (prefs.getBoolean("keep_screen_on", false)) return@setOnCheckedChangeListener
@@ -307,6 +307,30 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    private fun refreshDefaultRemoteModeLabel() {
+        val tv = findViewById<TextView>(R.id.tv_default_remote_mode) ?: return
+        val mode = prefs.getString("default_remote_mode", "LAST_USED") ?: "LAST_USED"
+        tv.text = when (mode) {
+            "DPAD" -> getString(R.string.default_mode_dpad)
+            "TRACKPAD" -> getString(R.string.default_mode_touchpad)
+            "NUMPAD" -> getString(R.string.default_mode_numpad)
+            else -> getString(R.string.default_mode_remember)
+        }
+    }
+
+    private fun openDefaultRemoteModePicker() {
+        val current = prefs.getString("default_remote_mode", "LAST_USED") ?: "LAST_USED"
+        val items = listOf(
+            Triple("LAST_USED", getString(R.string.default_mode_remember), current == "LAST_USED"),
+            Triple("DPAD", getString(R.string.default_mode_dpad), current == "DPAD"),
+            Triple("TRACKPAD", getString(R.string.default_mode_touchpad), current == "TRACKPAD"),
+            Triple("NUMPAD", getString(R.string.default_mode_numpad), current == "NUMPAD")
+        )
+        showPickerSheet(getString(R.string.dialog_default_remote_mode), items) { chosen ->
+            prefs.edit().putString("default_remote_mode", chosen).apply()
+            refreshDefaultRemoteModeLabel()
+        }
+    }
 
     private fun refreshLanguageLabel() {
         val current = LanguageManager.getLanguage(this)
@@ -414,7 +438,7 @@ class SettingsActivity : AppCompatActivity() {
             arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf()),
             intArrayOf(theme.switchThumbOn, theme.switchThumbOff)
         )
-        listOf(R.id.switch_channel_pill, R.id.switch_pad_instead_of_dpad, R.id.switch_keep_screen_on)
+        listOf(R.id.switch_haptic_feedback, R.id.switch_keep_screen_on)
             .forEach { id ->
                 val sw = findViewById<Switch>(id) ?: return@forEach
                 sw.trackTintList = trackCsl

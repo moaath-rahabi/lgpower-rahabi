@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">رحابي LG Power</string>
+    <string name="app_name">Rahabi LG Power</string>
     <string name="widget_label">تشغيل التلفاز</string>
     <string name="widget_description">تشغيل أو إيقاف التلفاز عبر Wi-Fi، أو بالأشعة تحت الحمراء عند تعذر الاتصال</string>
     <string name="screen_off_widget_label">إطفاء الشاشة</string>
@@ -19,7 +19,7 @@
     <string name="dialog_select_language">اختر لغة التطبيق</string>
 
     <!-- Main Remote Header & TV Card -->
-    <string name="brand_name">رحابي</string>
+    <string name="brand_name">Rahabi</string>
     <string name="brand_sub">LG POWER</string>
     <string name="tv_status_connected">متصل</string>
     <string name="tv_status_connecting">جارٍ الاتصال…</string>
@@ -34,7 +34,7 @@
     <!-- Quick Apps Rail -->
     <string name="quick_apps_title">تطبيقات سريعة:</string>
     <string name="app_live_tv">البث المباشر</string>
-    <string name="app_rahabi_home">رحابي هوم</string>
+    <string name="app_rahabi_home">Rahabi Home</string>
     <string name="app_drawer_desc">كافة تطبيقات التلفاز</string>
 
     <!-- Remote Modes -->
@@ -138,34 +138,34 @@
     <string name="row_service_wifi">قائمة الصيانة عبر Wi-Fi</string>
     <string name="row_service_ir">ريموت الصيانة عبر الأشعة تحت الحمراء</string>
     <string name="section_support">الدعم وحول التطبيق</string>
-    <string name="row_about_rahabi">حول رحابي LG Power</string>
+    <string name="row_about_rahabi">حول Rahabi LG Power</string>
     <string name="row_release_notes">ملاحظات الإصدار</string>
     <string name="row_conn_report">تقرير الاتصال</string>
     <string name="row_contact">مراسلة الدعم</string>
 
     <!-- About Screen -->
-    <string name="about_title">حول رحابي LG Power</string>
+    <string name="about_title">حول Rahabi LG Power</string>
     <string name="about_badge">إصدار المجتمع</string>
     <string name="about_version_format">الإصدار %1$s · البناء %2$d</string>
     <string name="about_section_overview">نظرة عامة</string>
-    <string name="about_overview_p1">رحابي LG Power هو إصدار مجتمعي مستقل ومطوّر من تطبيق LG Power مفتوح المصدر للتحكم في شاشات LG webOS الذكية عبر أندرويد.</string>
+    <string name="about_overview_p1">Rahabi LG Power هو إصدار مجتمعي مستقل ومطوّر من تطبيق LG Power مفتوح المصدر للتحكم في شاشات LG webOS الذكية عبر أندرويد.</string>
     <string name="about_overview_p2">يتميز هذا الإصدار بتقديم إدارة متقدمة للقنوات، ومجموعات مخصصة، ومفضلة، وواجهة تحكم باليد اليمنى مريحة، واختصارات سريعة للتطبيقات، ونظام سمات موحد.</string>
     <string name="about_section_credits">التطوير والحقوق</string>
     <string name="about_label_lead_dev">تم التطوير والتحسين بواسطة</string>
-    <string name="about_name_lead_dev">المهندس معاذ رحابي</string>
+    <string name="about_name_lead_dev">المهندس معاذ Rahabi</string>
     <string name="about_role_lead_dev">المطور الرئيسي · إدارة القنوات، وتجربة اليد اليمنى المريحة، والسمات والهوية</string>
     <string name="about_label_upstream">المشروع الأصلي مفتوح المصدر</string>
     <string name="about_name_upstream">LG Power للمطور Nicsilver</string>
     <string name="about_role_upstream">تطوير بروتوكول webOS الأساسي، ولوحة اللمس، ولوحة المفاتيح والاتصال</string>
     <string name="about_section_links">الكود المصدري والقانوني</string>
     <string name="about_link_upstream">المشروع الأصلي (Nicsilver/LGPower)</string>
-    <string name="about_link_repo">مستودع كود رحابي LG Power</string>
+    <string name="about_link_repo">مستودع كود Rahabi LG Power</string>
     <string name="about_link_release">تنزيل أحدث إصدار (APK)</string>
     <string name="about_link_release_notes">ملاحظات الإصدار</string>
     <string name="about_link_license">الترخيص (GNU AGPL v3)</string>
     <string name="about_link_notices">إشعارات الطرف الثالث</string>
     <string name="about_section_disclaimer">إخلاء المسؤولية</string>
-    <string name="about_disclaimer_text">رحابي LG Power هو مشروع مجتمعي مستقل ولا يتبع أو يرتبط بشركة LG Electronics بأي شكل من الأشكال. LG و webOS هي علامات تجارية مسجلة لشركة LG Electronics Inc.</string>
+    <string name="about_disclaimer_text">Rahabi LG Power هو مشروع مجتمعي مستقل ولا يتبع أو يرتبط بشركة LG Electronics بأي شكل من الأشكال. LG و webOS هي علامات تجارية مسجلة لشركة LG Electronics Inc.</string>
 
     <string name="row_channels_sub">قنوات التلفاز والمفضلة</string>
     <string name="label_channel_pill">أزرار القنوات بدلاً من شريط السطوع</string>
@@ -191,4 +191,25 @@
     <string name="shortcuts_summary_format">انقر للإضافة أو الإزالة · اضغط مطولاً للترتيب · %d/8 محددة</string>
     <string name="channels_syncing">جارٍ المزامنة مع التلفاز…</string>
     <string name="channels_cached_format">%d قنوات محفوظة (تعذر الوصول للتلفاز)</string>
+
+    <!-- Media Controls -->
+    <string name="media_rewind">ترجيع</string>
+    <string name="media_play">تشغيل</string>
+    <string name="media_pause">إيقاف مؤقت</string>
+    <string name="media_stop">إيقاف</string>
+    <string name="media_fast_forward">تقديم</string>
+
+    <!-- Settings: Default Mode & Haptics -->
+    <string name="row_default_remote_mode">وضع التحكم الافتراضي</string>
+    <string name="dialog_default_remote_mode">وضع التحكم عند فتح التطبيق</string>
+    <string name="default_mode_remember">تذكر آخر وضع تم استخدامه</string>
+    <string name="default_mode_dpad">الاتجاهات (الأسهم)</string>
+    <string name="default_mode_touchpad">لوحة اللمس</string>
+    <string name="default_mode_numpad">لوحة الأرقام</string>
+    <string name="label_haptic_feedback">الاهتزاز عند اللمس</string>
+    <string name="desc_haptic_feedback">اهتزاز لطيف عند الضغط على أزرار التحكم</string>
+
+    <!-- Reconnect -->
+    <string name="reconnect_desc">إعادة الاتصال والتحديث</string>
+    <string name="reconnecting_toast">جارٍ إعادة الاتصال والتحديث…</string>
 </resources>
