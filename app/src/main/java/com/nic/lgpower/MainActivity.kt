@@ -304,6 +304,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Quick Controls Grid
+        findViewById<View>(R.id.btn_qc_usb)?.setOnClickListener {
+            performHaptic(it)
+            launchUsbMediaPlayer()
+        }
         findViewById<View>(R.id.btn_qc_guide)?.setOnClickListener {
             performHaptic(it)
             sendKeyCommand { client.pressKey("GUIDE") }
@@ -997,7 +1001,7 @@ class MainActivity : AppCompatActivity() {
                R.id.btn_numpad_close, R.id.btn_app_settings, R.id.btn_ok,
                R.id.btn_vol_mute_icon, R.id.btn_volume_down, R.id.btn_volume_up,
                R.id.btn_channel_down, R.id.btn_channel_up, R.id.ch_swipe_surface,
-               R.id.btn_qc_guide, R.id.btn_qc_subtitles,
+               R.id.btn_qc_usb, R.id.btn_qc_guide, R.id.btn_qc_subtitles,
                R.id.btn_header_search, R.id.btn_apps_drawer)
             .forEach { setRipple(findViewById(it), color) }
         listOf(R.id.btn_num_0, R.id.btn_num_1, R.id.btn_num_2, R.id.btn_num_3, R.id.btn_num_4,
@@ -1144,7 +1148,7 @@ class MainActivity : AppCompatActivity() {
             ThemeManager.roundRect(theme.surfaceBg, 18f, theme.btnGhostBorder, 1f, density)
         val qcTiles = listOf(
             R.id.btn_media_rewind, R.id.btn_media_play, R.id.btn_media_pause, R.id.btn_media_stop, R.id.btn_media_forward,
-            R.id.btn_channels, R.id.btn_qc_guide, R.id.btn_qc_subtitles, R.id.btn_screen_off, R.id.btn_colors
+            R.id.btn_channels, R.id.btn_qc_usb, R.id.btn_qc_guide, R.id.btn_qc_subtitles, R.id.btn_screen_off, R.id.btn_colors
         )
         qcTiles.forEach { id ->
             val v = findViewById<ViewGroup>(id)

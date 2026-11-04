@@ -868,19 +868,25 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <!-- Row 2: Quick TV Utilities (Channels, Guide, Subtitles, Screen Off, Colors) -->
+                <!-- Row 2: Quick TV Utilities (Channels, USB, Guide, Subtitles, Screen Off, Colors) -->
                 <LinearLayout
                     android:id="@+id/quick_tools_row"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="4dp"
                     android:orientation="horizontal"
-                    android:weightSum="5">
+                    android:weightSum="6">
 
                     <!-- Channels -->
                     <LinearLayout android:id="@+id/btn_channels" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_margin="2dp" android:background="@drawable/bg_qc_tile" android:gravity="center" android:orientation="vertical" android:clickable="true" android:focusable="true">
                         <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/ic_channels" app:tint="#D4AF37" />
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/qc_channels" android:textColor="#859B8F" android:textSize="9sp" android:layout_marginTop="2dp" />
+                    </LinearLayout>
+
+                    <!-- USB Media Player -->
+                    <LinearLayout android:id="@+id/btn_qc_usb" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:layout_margin="2dp" android:background="@drawable/bg_qc_tile" android:gravity="center" android:orientation="vertical" android:clickable="true" android:focusable="true">
+                        <ImageView android:layout_width="18dp" android:layout_height="18dp" android:src="@drawable/ic_usb" app:tint="#D4AF37" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/qc_usb" android:textColor="#859B8F" android:textSize="9sp" android:layout_marginTop="2dp" />
                     </LinearLayout>
 
                     <!-- Guide -->
