@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 class AboutActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        LanguageManager.init(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)
 
@@ -43,7 +44,7 @@ class AboutActivity : AppCompatActivity() {
 
         // Dynamic version
         findViewById<TextView>(R.id.tv_about_version).text =
-            "Version ${BuildConfig.VERSION_NAME} · Build ${BuildConfig.VERSION_CODE}"
+            getString(R.string.about_version_format, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
 
         // Links
         findViewById<View>(R.id.row_link_upstream).setOnClickListener {

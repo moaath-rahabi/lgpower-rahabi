@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">رحابي LG Power</string>
+    <string name="widget_label">تشغيل التلفاز</string>
+    <string name="widget_description">تشغيل أو إيقاف التلفاز عبر Wi-Fi، أو بالأشعة تحت الحمراء عند تعذر الاتصال</string>
+    <string name="screen_off_widget_label">إطفاء الشاشة</string>
+    <string name="screen_off_widget_description">إطفاء لوحة الشاشة عبر Wi-Fi مع استمرار تشغيل الصوت</string>
+    <string name="ok_widget_label">موافق للتلفاز</string>
+    <string name="ok_widget_description">إرسال أمر موافق للتلفاز عبر الأشعة تحت الحمراء</string>
+    <string name="shortcut_widget_label">اختصار تطبيق LG</string>
+    <string name="shortcut_widget_description">تشغيل تطبيق في التلفاز بنقرة واحدة</string>
+    <color name="power_icon">#FFFFFFFF</color>
+
+    <!-- Language Selection -->
+    <string name="lang_system_default">تلقائي (حسب لغة الهاتف)</string>
+    <string name="lang_arabic">العربية (Arabic)</string>
+    <string name="lang_english">English (الإنجليزية)</string>
+    <string name="setting_language_title">اللغة</string>
+    <string name="dialog_select_language">اختر لغة التطبيق</string>
+
+    <!-- Main Remote Header & TV Card -->
+    <string name="brand_name">رحابي</string>
+    <string name="brand_sub">LG POWER</string>
+    <string name="tv_status_connected">متصل</string>
+    <string name="tv_status_connecting">جارٍ الاتصال…</string>
+    <string name="tv_status_disconnected">غير متصل</string>
+    <string name="tv_status_reconnecting">إعادة الاتصال…</string>
+    <string name="tv_status_turned_off">مغلق</string>
+    <string name="tv_status_unreachable">لا يمكن الوصول للتلفاز</string>
+    <string name="search_channels_desc">البحث في القنوات</string>
+    <string name="settings_desc">الإعدادات</string>
+    <string name="power_desc">زر التشغيل والإيقاف</string>
+
+    <!-- Quick Apps Rail -->
+    <string name="quick_apps_title">تطبيقات سريعة:</string>
+    <string name="app_live_tv">البث المباشر</string>
+    <string name="app_rahabi_home">رحابي هوم</string>
+    <string name="app_drawer_desc">كافة تطبيقات التلفاز</string>
+
+    <!-- Remote Modes -->
+    <string name="mode_dpad">الاتجاهات</string>
+    <string name="mode_trackpad">لوحة اللمس</string>
+    <string name="mode_numpad">الأرقام</string>
+    <string name="dpad_center_ok">موافق</string>
+    <string name="trackpad_hint_primary">اسحب لتحريك المؤشر</string>
+    <string name="trackpad_hint_secondary">انقر للضغط · إصبعين للتمرير</string>
+
+    <!-- Volume & Channels -->
+    <string name="mute_desc">كتم الصوت</string>
+    <string name="vol_up_desc">رفع الصوت</string>
+    <string name="vol_down_desc">خفض الصوت</string>
+    <string name="swipe_ch_label">اسحب لتغيير القناة</string>
+    <string name="ch_up_desc">القناة التالية</string>
+    <string name="ch_down_desc">القناة السابقة</string>
+
+    <!-- Main Action Row -->
+    <string name="action_home">الرئيسية</string>
+    <string name="action_back">رجوع</string>
+    <string name="action_menu">القائمة</string>
+    <string name="action_input">المصدر</string>
+    <string name="action_mute">كتم الصوت</string>
+    <string name="action_keyboard">المفاتيح</string>
+
+    <!-- Quick Controls -->
+    <string name="qc_channels">القنوات</string>
+    <string name="qc_guide">الدليل</string>
+    <string name="qc_usb">USB</string>
+    <string name="qc_screen_off">إطفاء الشاشة</string>
+    <string name="qc_colors">الألوان</string>
+    <string name="qc_picture">الصورة</string>
+    <string name="qc_sound_eq">الصوت</string>
+    <string name="qc_subtitles">الترجمة</string>
+    <string name="qc_quick_menu">قائمة سريعة</string>
+
+    <!-- Channels Screen & Management -->
+    <string name="channels_title">القنوات</string>
+    <string name="channels_title_ar">القنوات</string>
+    <string name="search_channels_hint">ابحث عن قناة أو رقم…</string>
+    <string name="tab_all">الكل</string>
+    <string name="tab_favorites">المفضلة</string>
+    <string name="tab_group_add">+ مجموعة</string>
+    <string name="empty_groups_hint">لا توجد مجموعات بعد. أنشئ مجموعة لتنظيم قنواتك التلفزيونية.</string>
+    <string name="create_group_action">+ إنشاء مجموعة</string>
+    <string name="dialog_create_group_title">إنشاء مجموعة قنوات</string>
+    <string name="dialog_rename_group_title">إعادة تسمية المجموعة</string>
+    <string name="dialog_manage_groups_title">إدارة المجموعات</string>
+    <string name="group_name_hint">اسم المجموعة (مثال: رياضة، أخبار، أفلام)</string>
+    <string name="action_create">إنشاء</string>
+    <string name="action_rename">إعادة تسمية</string>
+    <string name="action_delete">حذف</string>
+    <string name="action_close">إغلاق</string>
+    <string name="action_refresh">تحديث</string>
+    <string name="action_edit">تعديل</string>
+    <string name="action_save">حفظ</string>
+    <string name="action_cancel">إلغاء</string>
+    <string name="action_reset_channel">إعادة ضبط القناة</string>
+    <string name="action_global_reset">استعادة بيانات البث الأصلية</string>
+    <string name="dialog_edit_channel_title">تعديل القناة</string>
+    <string name="original_channel_label">قناة التلفاز الأصلية</string>
+    <string name="original_name_label">الاسم الأصلي</string>
+    <string name="original_number_label">الرقم الأصلي</string>
+    <string name="custom_name_label">الاسم المخصص للعرض</string>
+    <string name="custom_shortcut_label">رقم الاختصار المخصص</string>
+    <string name="custom_name_hint">اتركه فارغاً لاستخدام الاسم الأصلي</string>
+    <string name="custom_number_hint">مثال: 10, 101, 296</string>
+    <string name="groups_label">مجموعات القنوات</string>
+    <string name="favorite_label">المفضلة (★)</string>
+    <string name="hidden_label">إخفاء القناة</string>
+    <string name="current_channel_badge">مباشر</string>
+    <string name="confirm_delete_group">هل أنت متأكد من رغبتك في حذف هذه المجموعة؟</string>
+    <string name="confirm_global_reset">هل تريد إعادة ضبط جميع الأسماء المخصصة والأرقام والمجموعات لبيانات البث الأصلية للتلفاز؟</string>
+    <string name="toast_channel_saved">تم حفظ تعديلات القناة</string>
+    <string name="toast_channel_reset">تمت استعادة بيانات القناة الأصلية</string>
+    <string name="toast_all_reset">تمت استعادة الإعدادات الأصلية لجميع القنوات</string>
+    <string name="channels_connecting">جارٍ الاتصال والتحديث…</string>
+    <string name="channels_count_format">%d قناة</string>
+
+    <!-- Settings Screen -->
+    <string name="settings_title">الإعدادات</string>
+    <string name="section_tvs">أجهزة التلفاز</string>
+    <string name="row_add_tv">إضافة تلفاز</string>
+    <string name="add_tv_desc">انقر على التلفاز لإعادة تسميته أو تعديل عنوانه. في شاشة الريموت، انقر اسم التلفاز في الزاوية للتبديل.</string>
+    <string name="section_channels">القنوات والمجموعات</string>
+    <string name="row_open_channels">فتح إدارة القنوات</string>
+    <string name="open_channels_desc">إدارة كافة قنوات التلفاز، وإشارات المفضلة، وتصنيفات المجموعات المخصصة.</string>
+    <string name="section_controls">عناصر التحكم</string>
+    <string name="row_keep_screen_on">إبقاء الشاشة مفعلة</string>
+    <string name="row_wake_action">إجراء التشغيل</string>
+    <string name="row_channel_pill">شريط القنوات السريع باليد اليمنى</string>
+    <string name="row_touchpad_mode">لوحة اللمس بدلاً من الاتجاهات</string>
+    <string name="section_shortcuts">تطبيقات الاختصارات</string>
+    <string name="shortcuts_hint">انقر للتعديل · اسحب لإعادة الترتيب</string>
+    <string name="section_appearance">المظهر واللغة</string>
+    <string name="row_theme">السمة</string>
+    <string name="row_create_theme">إنشاء سمة مخصصة</string>
+    <string name="row_language">لغة التطبيق</string>
+    <string name="section_service">خدمات الصيانة</string>
+    <string name="row_service_wifi">قائمة الصيانة عبر Wi-Fi</string>
+    <string name="row_service_ir">ريموت الصيانة عبر الأشعة تحت الحمراء</string>
+    <string name="section_support">الدعم وحول التطبيق</string>
+    <string name="row_about_rahabi">حول رحابي LG Power</string>
+    <string name="row_release_notes">ملاحظات الإصدار</string>
+    <string name="row_conn_report">تقرير الاتصال</string>
+    <string name="row_contact">مراسلة الدعم</string>
+
+    <!-- About Screen -->
+    <string name="about_title">حول رحابي LG Power</string>
+    <string name="about_badge">إصدار المجتمع</string>
+    <string name="about_version_format">الإصدار %1$s · البناء %2$d</string>
+    <string name="about_section_overview">نظرة عامة</string>
+    <string name="about_overview_p1">رحابي LG Power هو إصدار مجتمعي مستقل ومطوّر من تطبيق LG Power مفتوح المصدر للتحكم في شاشات LG webOS الذكية عبر أندرويد.</string>
+    <string name="about_overview_p2">يتميز هذا الإصدار بتقديم إدارة متقدمة للقنوات، ومجموعات مخصصة، ومفضلة، وواجهة تحكم باليد اليمنى مريحة، واختصارات سريعة للتطبيقات، ونظام سمات موحد.</string>
+    <string name="about_section_credits">التطوير والحقوق</string>
+    <string name="about_label_lead_dev">تم التطوير والتحسين بواسطة</string>
+    <string name="about_name_lead_dev">المهندس معاذ رحابي</string>
+    <string name="about_role_lead_dev">المطور الرئيسي · إدارة القنوات، وتجربة اليد اليمنى المريحة، والسمات والهوية</string>
+    <string name="about_label_upstream">المشروع الأصلي مفتوح المصدر</string>
+    <string name="about_name_upstream">LG Power للمطور Nicsilver</string>
+    <string name="about_role_upstream">تطوير بروتوكول webOS الأساسي، ولوحة اللمس، ولوحة المفاتيح والاتصال</string>
+    <string name="about_section_links">الكود المصدري والقانوني</string>
+    <string name="about_link_upstream">المشروع الأصلي (Nicsilver/LGPower)</string>
+    <string name="about_link_repo">مستودع كود رحابي LG Power</string>
+    <string name="about_link_release">تنزيل أحدث إصدار (APK)</string>
+    <string name="about_link_release_notes">ملاحظات الإصدار</string>
+    <string name="about_link_license">الترخيص (GNU AGPL v3)</string>
+    <string name="about_link_notices">إشعارات الطرف الثالث</string>
+    <string name="about_section_disclaimer">إخلاء المسؤولية</string>
+    <string name="about_disclaimer_text">رحابي LG Power هو مشروع مجتمعي مستقل ولا يتبع أو يرتبط بشركة LG Electronics بأي شكل من الأشكال. LG و webOS هي علامات تجارية مسجلة لشركة LG Electronics Inc.</string>
+
+    <string name="row_channels_sub">قنوات التلفاز والمفضلة</string>
+    <string name="label_channel_pill">أزرار القنوات بدلاً من شريط السطوع</string>
+    <string name="label_touchpad_switch">لوحة اللمس بدلاً من الاتجاهات</string>
+    <string name="desc_touchpad_switch">استبدال أزرار الأسهم بمؤشر لوحة اللمس</string>
+    <string name="label_keep_screen_on">إبقاء الشاشة مفعلة</string>
+    <string name="label_after_wake">الإجراء بعد تشغيل التلفاز</string>
+    <string name="wake_home">الصفحة الرئيسية</string>
+    <string name="btn_load_apps">تحميل التطبيقات من التلفاز</string>
+    <string name="section_advanced">خيارات متقدمة</string>
+    <string name="about_community_sub">إصدار المجتمع · الحقوق والترخيص</string>
+    <string name="row_tour">عرض الجولة التعريفية</string>
+    <string name="row_contact_desc">إرسال ملاحظات أو الإبلاغ عن مشكلة</string>
+    <string name="row_conn_report_desc">تفاصيل الهاتف والتلفاز والواي فاي، للصقها في تقرير المشاكل. لا يتم إرسال أي بيانات تلقائياً.</string>
+    <string name="channels_empty_found">لم يتم العثور على قنوات</string>
+    <string name="edit_channel_no_groups">لا توجد مجموعات مخصصة بعد. انقر على + مجموعة لإنشاء واحدة.</string>
+    <string name="btn_add_group_editor">+ مجموعة</string>
+    <string name="disclaimer_title">إخلاء المسؤولية</string>
+
+    <string name="tv_in_use">قيد الاستخدام</string>
+    <string name="wake_stay">إبقاء الوضع الحالي</string>
+    <string name="shortcuts_load_prompt">لم يتم ضبط اختصارات — حمّل التطبيقات لاختيار بعضها</string>
+    <string name="shortcuts_summary_format">انقر للإضافة أو الإزالة · اضغط مطولاً للترتيب · %d/8 محددة</string>
+    <string name="channels_syncing">جارٍ المزامنة مع التلفاز…</string>
+    <string name="channels_cached_format">%d قنوات محفوظة (تعذر الوصول للتلفاز)</string>
+</resources>

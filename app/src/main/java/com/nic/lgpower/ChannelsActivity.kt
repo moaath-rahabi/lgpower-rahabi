@@ -42,6 +42,7 @@ class ChannelsActivity : AppCompatActivity() {
     private lateinit var clearSearchBtn: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        LanguageManager.init(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_channels)
 
@@ -146,7 +147,7 @@ class ChannelsActivity : AppCompatActivity() {
 
     private fun fetchChannels(forced: Boolean) {
         loadingBar.visibility = View.VISIBLE
-        countText.text = if (forced) "Syncing from TV…" else "Connecting to TV…"
+        countText.text = if (forced) getString(R.string.channels_syncing) else getString(R.string.channels_connecting)
 
         Thread {
             val list = runCatching { client.getChannelList(timeoutSecs = 12) }.getOrNull()
@@ -165,10 +166,10 @@ class ChannelsActivity : AppCompatActivity() {
                     Toast.makeText(this, "Loaded ${list.size} channels", Toast.LENGTH_SHORT).show()
                 } else {
                     if (allChannels.isEmpty()) {
-                        countText.text = "Could not reach TV"
+                        countText.text = getString(R.string.tv_status_unreachable)
                         Toast.makeText(this, "Could not retrieve channel list. Is TV on?", Toast.LENGTH_LONG).show()
                     } else {
-                        countText.text = "${allChannels.size} cached channels (TV unreachable)"
+                        countText.text = getString(R.string.channels_cached_format, allChannels.size)
                         Toast.makeText(this, "TV unreachable, using cached channels", Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -265,8 +266,8 @@ class ChannelsActivity : AppCompatActivity() {
 
         val favCount = customizations.values.count { it.favorite }
         val allGroups = mutableListOf(
-            "ALL" to "All (${allChannels.size})",
-            "FAVORITES" to "★ Favorites ($favCount)"
+            "ALL" to "${getString(R.string.tab_all)} (${allChannels.size})",
+            "FAVORITES" to "★ ${getString(R.string.tab_favorites)} ($favCount)"
         )
 
         customGroups.forEach { groupName ->
@@ -318,7 +319,7 @@ class ChannelsActivity : AppCompatActivity() {
 
         // "+ Group" chip
         val addBtn = Button(this).apply {
-            text = "+ Group"
+            text = getString(R.string.tab_group_add)
             textSize = 12f
             isAllCaps = false
             val hPad = (12 * density).toInt()

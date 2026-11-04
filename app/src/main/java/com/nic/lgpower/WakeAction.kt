@@ -21,6 +21,12 @@ object WakeAction {
             STAY -> "Leave as is"
             else -> label
         }
+
+        fun getLocalizedDisplay(context: android.content.Context): String = when (kind) {
+            HOME -> context.getString(R.string.wake_home)
+            STAY -> context.getString(R.string.wake_stay)
+            else -> label
+        }
     }
 
     private fun key(prefs: SharedPreferences) =

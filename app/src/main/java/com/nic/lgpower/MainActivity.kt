@@ -112,6 +112,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        LanguageManager.init(this)
         super.onCreate(savedInstanceState)
         // First launch: no TV configured — go through setup before showing the remote
         if (client.tvIp.isBlank()) {
@@ -1210,11 +1211,11 @@ class MainActivity : AppCompatActivity() {
         val dot = findViewById<View>(R.id.status_dot)
         val statusText = findViewById<TextView>(R.id.tv_status_text)
         val (color, text) = when (status) {
-            TvStatus.CHECKING     -> 0xFF888888.toInt() to "Checking"
-            TvStatus.CONNECTED    -> 0xFF4CAF50.toInt() to "Connected"
-            TvStatus.SEARCHING    -> 0xFFFF9800.toInt() to "Searching"
-            TvStatus.PAIRING      -> 0xFFFF9800.toInt() to "Pairing"
-            TvStatus.DISCONNECTED -> 0xFFF44336.toInt() to "Disconnected"
+            TvStatus.CHECKING     -> 0xFF888888.toInt() to getString(R.string.tv_status_connecting)
+            TvStatus.CONNECTED    -> 0xFF4CAF50.toInt() to getString(R.string.tv_status_connected)
+            TvStatus.SEARCHING    -> 0xFFFF9800.toInt() to getString(R.string.tv_status_reconnecting)
+            TvStatus.PAIRING      -> 0xFFFF9800.toInt() to getString(R.string.tv_status_connecting)
+            TvStatus.DISCONNECTED -> 0xFFF44336.toInt() to getString(R.string.tv_status_disconnected)
         }
         dot?.background = GradientDrawable().apply {
             shape = GradientDrawable.OVAL

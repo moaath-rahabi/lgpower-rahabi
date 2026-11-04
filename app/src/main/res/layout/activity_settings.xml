@@ -21,7 +21,7 @@
             android:tag="title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Settings"
+            android:text="@string/settings_title"
             android:textColor="#FFFFFF"
             android:textSize="30sp"
             android:textStyle="bold"
@@ -34,7 +34,7 @@
             android:tag="section_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TVS"
+            android:text="@string/section_tvs"
             android:textColor="#8E8E93"
             android:textSize="12sp"
             android:letterSpacing="0.06"
@@ -73,7 +73,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Add a TV"
+                    android:text="@string/row_add_tv"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp" />
 
@@ -92,7 +92,7 @@
                 android:tag="row_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Tap a TV to rename it or change its address. On the remote, tap the TV name in the corner to switch."
+                android:text="@string/add_tv_desc"
                 android:textColor="#8E8E93"
                 android:textSize="12sp"
                 android:lineSpacingExtra="2dp"
@@ -107,7 +107,7 @@
             android:tag="section_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="CONTROLS"
+            android:text="@string/section_controls"
             android:textColor="#8E8E93"
             android:textSize="12sp"
             android:letterSpacing="0.06"
@@ -140,7 +140,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="TV Channels &amp; Favorites"
+                    android:text="@string/row_channels_sub"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp" />
 
@@ -168,7 +168,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Channel buttons instead of brightness"
+                    android:text="@string/label_channel_pill"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp" />
 
@@ -205,7 +205,7 @@
                         android:tag="row_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Touchpad instead of D-pad"
+                        android:text="@string/label_touchpad_switch"
                         android:textColor="#FFFFFF"
                         android:textSize="15sp" />
 
@@ -214,7 +214,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Replaces the arrows with a pointer pad"
+                        android:text="@string/desc_touchpad_switch"
                         android:textColor="#8E8E93"
                         android:textSize="12sp" />
 
@@ -247,7 +247,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Keep screen on"
+                    android:text="@string/label_keep_screen_on"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp" />
 
@@ -281,7 +281,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="After waking the TV"
+                    android:text="@string/label_after_wake"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp" />
 
@@ -290,7 +290,8 @@
                     android:tag="row_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Home screen"
+                    android:layout_marginStart="12dp"
+                    android:text="@string/wake_home"
                     android:textColor="#8E8E93"
                     android:textSize="15sp" />
 
@@ -305,7 +306,7 @@
             android:tag="section_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="APP SHORTCUTS"
+            android:text="@string/section_shortcuts"
             android:textColor="#8E8E93"
             android:textSize="12sp"
             android:letterSpacing="0.06"
@@ -360,7 +361,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="?attr/selectableItemBackground"
-                    android:text="Load Apps from TV"
+                    android:text="@string/btn_load_apps"
                     android:textAllCaps="false"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp"
@@ -388,7 +389,7 @@
             android:tag="section_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="APPEARANCE"
+            android:text="@string/section_appearance"
             android:textColor="#8E8E93"
             android:textSize="12sp"
             android:letterSpacing="0.06"
@@ -421,7 +422,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Theme"
+                    android:text="@string/row_theme"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp" />
 
@@ -464,9 +465,51 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Create Custom Theme"
+                    android:text="@string/row_create_theme"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_chevron_right"
+                    android:scaleType="fitCenter"
+                    android:tint="#555555" />
+
+            </LinearLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#242424" android:tag="divider" android:layout_marginStart="16dp" />
+
+            <LinearLayout
+                android:id="@+id/row_language"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:tag="row_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/row_language"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tv_current_language"
+                    android:tag="row_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lang_system_default"
+                    android:textColor="#8E8E93"
+                    android:textSize="15sp"
+                    android:layout_marginEnd="4dp" />
 
                 <ImageView
                     android:layout_width="16dp"
@@ -484,7 +527,7 @@
             android:tag="section_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ADVANCED"
+            android:text="@string/section_advanced"
             android:textColor="#8E8E93"
             android:textSize="12sp"
             android:letterSpacing="0.06"
@@ -517,7 +560,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Service Menu (Wi-Fi)"
+                    android:text="@string/row_service_wifi"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp" />
 
@@ -551,7 +594,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Service Menu (IR)"
+                    android:text="@string/row_service_ir"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp" />
 
@@ -572,7 +615,7 @@
             android:tag="section_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ABOUT"
+            android:text="@string/section_support"
             android:textColor="#8E8E93"
             android:textSize="12sp"
             android:letterSpacing="0.06"
@@ -695,7 +738,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Community Edition · Credits &amp; License"
+                        android:text="@string/about_community_sub"
                         android:textColor="#8E8E93"
                         android:textSize="12sp" />
 
@@ -765,7 +808,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Show the tour"
+                    android:text="@string/row_tour"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp" />
 
@@ -797,7 +840,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Release notes"
+                    android:text="@string/row_release_notes"
                     android:textColor="#FFFFFF"
                     android:textSize="15sp" />
 
@@ -836,7 +879,7 @@
                         android:tag="row_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Contact"
+                        android:text="@string/row_contact"
                         android:textColor="#FFFFFF"
                         android:textSize="15sp" />
 
@@ -845,7 +888,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Send feedback or report a problem"
+                        android:text="@string/row_contact_desc"
                         android:textColor="#8E8E93"
                         android:textSize="12sp" />
 
@@ -886,7 +929,7 @@
                         android:tag="row_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Copy connection report"
+                        android:text="@string/row_conn_report"
                         android:textColor="#FFFFFF"
                         android:textSize="15sp" />
 
@@ -895,7 +938,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
-                        android:text="Phone, TV and Wi-Fi details plus a quick speed test, to paste into a bug report. Nothing is sent."
+                        android:text="@string/row_conn_report_desc"
                         android:textColor="#8E8E93"
                         android:textSize="12sp" />
 

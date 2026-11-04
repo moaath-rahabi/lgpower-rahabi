@@ -38,6 +38,7 @@ class SettingsActivity : AppCompatActivity() {
     private var tipPending = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        LanguageManager.init(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
         SystemBars.applyTo(this, findViewById(R.id.settings_root), ThemeManager.getActiveTheme(this).windowBg)
@@ -149,7 +150,7 @@ class SettingsActivity : AppCompatActivity() {
             appsGrid.visibility = View.VISIBLE
             updateSummary(current)
         } else {
-            tvShortcutsSummary.text = "No shortcuts configured — load apps from TV to pick some"
+            tvShortcutsSummary.text = getString(R.string.shortcuts_load_prompt)
         }
 
         findViewById<View>(R.id.row_service_wifi).setOnClickListener {
@@ -197,6 +198,10 @@ class SettingsActivity : AppCompatActivity() {
         findViewById<View>(R.id.row_create_theme).setOnClickListener {
             openThemeEditor(baseId = ThemeManager.getActiveThemeId(this), editId = null)
         }
+
+        // Language picker
+        refreshLanguageLabel()
+        findViewById<View>(R.id.row_language).setOnClickListener { openLanguagePicker() }
 
         // Load full app list from TV
         val loadAppsSpinner = findViewById<ProgressBar>(R.id.load_apps_spinner)
@@ -267,7 +272,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun refreshWakeActionLabel() {
-        findViewById<TextView>(R.id.tv_wake_action).text = WakeAction.get(prefs).display
+        findViewById<TextView>(R.id.tv_wake_action).text = WakeAction.get(prefs).getLocalizedDisplay(this)
     }
 
     // Inputs come from the TV when it answers, otherwise from the last list it gave us,
@@ -287,18 +292,42 @@ class SettingsActivity : AppCompatActivity() {
     private fun showWakeActionPicker(inputs: List<WebOsClient.InputSource>, apps: List<WebOsClient.TvApp>) {
         val current = WakeAction.get(prefs)
         val options = mutableListOf(
-            WakeAction.Action(WakeAction.HOME),
-            WakeAction.Action(WakeAction.STAY),
+            Pair(WakeAction.Action(WakeAction.HOME), getString(R.string.wake_home)),
+            Pair(WakeAction.Action(WakeAction.STAY), getString(R.string.wake_stay)),
         )
-        inputs.forEach { options.add(WakeAction.Action(WakeAction.INPUT, it.id, it.label)) }
-        apps.forEach { options.add(WakeAction.Action(WakeAction.APP, it.id, it.title)) }
+        inputs.forEach { options.add(Pair(WakeAction.Action(WakeAction.INPUT, it.id, it.label), it.label)) }
+        apps.forEach { options.add(Pair(WakeAction.Action(WakeAction.APP, it.id, it.title), it.title)) }
         val keyOf = { a: WakeAction.Action -> "${a.kind}:${a.id}" }
         showPickerSheet(
-            "After waking the TV",
-            options.map { Triple(keyOf(it), it.display, keyOf(it) == keyOf(current)) }
+            getString(R.string.label_after_wake),
+            options.map { (action, label) -> Triple(keyOf(action), label, keyOf(action) == keyOf(current)) }
         ) { key ->
-            options.firstOrNull { keyOf(it) == key }?.let { WakeAction.set(prefs, it) }
+            options.firstOrNull { keyOf(it.first) == key }?.let { WakeAction.set(prefs, it.first) }
             refreshWakeActionLabel()
+        }
+    }
+
+
+    private fun refreshLanguageLabel() {
+        val current = LanguageManager.getLanguage(this)
+        findViewById<TextView>(R.id.tv_current_language)?.text =
+            LanguageManager.getLanguageDisplayName(this, current)
+    }
+
+    private fun openLanguagePicker() {
+        val current = LanguageManager.getLanguage(this)
+        val items = listOf(
+            Triple(LanguageManager.LANG_SYSTEM, getString(R.string.lang_system_default), current == LanguageManager.LANG_SYSTEM),
+            Triple(LanguageManager.LANG_AR, getString(R.string.lang_arabic), current == LanguageManager.LANG_AR),
+            Triple(LanguageManager.LANG_EN, getString(R.string.lang_english), current == LanguageManager.LANG_EN)
+        )
+        showPickerSheet(
+            getString(R.string.dialog_select_language),
+            items
+        ) { langCode ->
+            LanguageManager.setLanguage(this, langCode)
+            refreshLanguageLabel()
+            recreate()
         }
     }
 
@@ -442,7 +471,7 @@ class SettingsActivity : AppCompatActivity() {
             }
             row.addView(text)
             if (tv.id == activeId) row.addView(TextView(this).apply {
-                this.text = "In use"; textSize = 12f; setTextColor(theme.btnAccentBg)
+                this.text = getString(R.string.tv_in_use); textSize = 12f; setTextColor(theme.btnAccentBg)
                 setPadding(0, 0, (8 * d).toInt(), 0)
             })
             row.addView(android.widget.ImageView(this).apply {
@@ -541,6 +570,6 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun updateSummary(chosen: List<WebOsClient.TvApp>) {
-        tvShortcutsSummary.text = "Tap to add or remove · Long-press to reorder · ${chosen.size}/8 selected"
+        tvShortcutsSummary.text = getString(R.string.shortcuts_summary_format, chosen.size)
     }
 }

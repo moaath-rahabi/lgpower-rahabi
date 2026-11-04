@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="8dp"
-            android:text="About Rahabi LG Power"
+            android:text="@string/about_title"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:fontFamily="sans-serif-medium" />
@@ -91,7 +91,7 @@
                     android:background="@drawable/bg_community_badge"
                     android:paddingHorizontal="12dp"
                     android:paddingVertical="4dp"
-                    android:text="COMMUNITY EDITION"
+                    android:text="@string/about_badge"
                     android:textColor="#E6C65A"
                     android:textSize="11sp"
                     android:textStyle="bold"
@@ -114,7 +114,7 @@
                 android:tag="section_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="OVERVIEW"
+                android:text="@string/about_section_overview"
                 android:textColor="#8E8E93"
                 android:textSize="12sp"
                 android:letterSpacing="0.06"
@@ -136,7 +136,7 @@
                     android:tag="row_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Rahabi LG Power is an independent community-enhanced edition of LG Power, an open-source Android remote control application for LG webOS televisions."
+                    android:text="@string/about_overview_p1"
                     android:textColor="#E0E0E0"
                     android:textSize="14sp"
                     android:lineSpacingExtra="4dp" />
@@ -147,7 +147,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="This edition builds upon the original project with advanced channel management, personalized channel groups, favorites, an enhanced right-handed remote interface, improved application shortcuts, and unified theme support."
+                    android:text="@string/about_overview_p2"
                     android:textColor="#A0A0A0"
                     android:textSize="13sp"
                     android:lineSpacingExtra="3dp" />
@@ -159,7 +159,7 @@
                 android:tag="section_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="DEVELOPMENT &amp; CREDITS"
+                android:text="@string/about_section_credits"
                 android:textColor="#8E8E93"
                 android:textSize="12sp"
                 android:letterSpacing="0.06"
@@ -180,7 +180,7 @@
                     android:tag="section_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DEVELOPED AND ENHANCED BY"
+                    android:text="@string/about_label_lead_dev"
                     android:textColor="#D4AF37"
                     android:textSize="11sp"
                     android:letterSpacing="0.05"
@@ -191,7 +191,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:text="Eng. Moaath Rahabi"
+                    android:text="@string/about_name_lead_dev"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-medium" />
@@ -201,7 +201,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Lead Developer · Channel Management, Right-Handed UX, Themes &amp; Branding"
+                    android:text="@string/about_role_lead_dev"
                     android:textColor="#8E8E93"
                     android:textSize="12sp" />
 
@@ -216,7 +216,7 @@
                     android:tag="section_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ORIGINAL OPEN-SOURCE PROJECT"
+                    android:text="@string/about_label_upstream"
                     android:textColor="#D4AF37"
                     android:textSize="11sp"
                     android:letterSpacing="0.05"
@@ -227,7 +227,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:text="LG Power by Nicsilver"
+                    android:text="@string/about_name_upstream"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp"
                     android:fontFamily="sans-serif-medium" />
@@ -237,7 +237,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Core webOS protocol implementation, touchpad, keyboard &amp; app foundation"
+                    android:text="@string/about_role_upstream"
                     android:textColor="#8E8E93"
                     android:textSize="12sp" />
 
@@ -248,7 +248,7 @@
                 android:tag="section_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="SOURCE CODE &amp; LEGAL"
+                android:text="@string/about_section_links"
                 android:textColor="#8E8E93"
                 android:textSize="12sp"
                 android:letterSpacing="0.06"
@@ -282,7 +282,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Original Project (Nicsilver/LGPower)"
+                        android:text="@string/about_link_upstream"
                         android:textColor="#FFFFFF"
                         android:textSize="14sp" />
 
@@ -315,7 +315,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Rahabi LG Power Repository"
+                        android:text="@string/about_link_repo"
                         android:textColor="#FFFFFF"
                         android:textSize="14sp" />
 
@@ -348,7 +348,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Download Latest Release (APK)"
+                        android:text="@string/about_link_release"
                         android:textColor="#D4AF37"
                         android:textStyle="bold"
                         android:textSize="14sp" />
@@ -382,7 +382,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Release Notes / What's New"
+                        android:text="@string/about_link_release_notes"
                         android:textColor="#FFFFFF"
                         android:textSize="14sp" />
 
@@ -415,7 +415,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Open-Source License (GNU AGPL-3.0)"
+                        android:text="@string/about_link_license"
                         android:textColor="#FFFFFF"
                         android:textSize="14sp" />
 
@@ -448,7 +448,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Third-Party Notices"
+                        android:text="@string/about_link_notices"
                         android:textColor="#FFFFFF"
                         android:textSize="14sp" />
 
@@ -477,7 +477,7 @@
                     android:tag="section_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DISCLAIMER"
+                    android:text="@string/about_section_disclaimer"
                     android:textColor="#8E8E93"
                     android:textSize="11sp"
                     android:letterSpacing="0.05"
@@ -489,7 +489,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="Rahabi LG Power is an independent community project. It is not affiliated with, endorsed by, or connected to LG Electronics. LG and webOS are registered trademarks of LG Electronics Inc."
+                    android:text="@string/about_disclaimer_text"
                     android:textColor="#7A7A7A"
                     android:textSize="12sp"
                     android:lineSpacingExtra="2dp" />
